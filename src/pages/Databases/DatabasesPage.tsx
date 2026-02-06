@@ -142,7 +142,7 @@ function DatabasesPage() {
         {/* Add Database Button / Skeleton */}
         {isLoading ? (
           <div className="w-32 h-11 bg-gray-200 rounded-full animate-pulse" />
-        ) : (
+        ) : status === "loaded" || status === "empty" ? (
           <button 
             onClick={() => setIsAddOpen(true)} 
             className="flex items-center gap-4 px-6 py-3 leading-none bg-green-600 text-white rounded-full text-sm font-medium"
@@ -150,7 +150,7 @@ function DatabasesPage() {
             <Plus className="h-4 w-4" />
             Add Database
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Statistics Row / Skeleton */}
