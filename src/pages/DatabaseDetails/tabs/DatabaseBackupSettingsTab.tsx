@@ -18,15 +18,20 @@ export default function DatabaseBackupSettingsTab() {
 
   const { id } = useParams<{ id: string }>();
 
-  const prev = settings;
+  const fetchSettings = async () => {
+    if (!id) {
+      throw new Error("Database ID is missing in URL parameters.");
+    }
+    const data = await getBackupSettings(id);
+    setSettings(data);
+  };
+
 
   //update settings
   async function handleUpdateBackupSettings( patch: Partial<BackupSettings> ): Promise<void> {
     if(saving){
       return
     }
-
-    setSaving(true)
 
     if (!id) {
       console.error("Missing database ID");
@@ -38,13 +43,14 @@ export default function DatabaseBackupSettingsTab() {
       return;
     }
 
+    const prev = settings;
+    setSaving(true)
+
     try {
-      const updated = await updateBackupSettings(id, patch);
+      await updateBackupSettings(id, patch);
 
       // Sync current state
-      setSettings((prev) =>
-        prev ? { ...prev, ...updated } : prev
-      );
+      await fetchSettings();
 
     } catch (error) {
       setSettings(prev);
@@ -59,14 +65,7 @@ export default function DatabaseBackupSettingsTab() {
   useEffect(() => {
     const load = async() => {
       try {
-        if (!id) {
-          throw new Error("Database ID is missing in URL parameters.");
-        }
-        
-
-        //await new Promise(res=> setTimeout(res, 3000))
-        const data = await getBackupSettings(id);
-        setSettings(data);
+        await fetchSettings()
       } catch(error){
         setError("Error fetching backup settings")
         console.log("Error fetching backup settings: ", error)

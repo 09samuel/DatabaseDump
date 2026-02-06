@@ -13,6 +13,7 @@ type ApiBackupSettings = {
   s3_region: string | null;
   backup_upload_role_arn: string | null;
   backup_restore_role_arn: string | null
+  backup_delete_role_arn: string | null
   local_storage_path: string | null;
 
   // Retention
@@ -47,6 +48,7 @@ export function mapBackupSettingsFromApi( api: ApiBackupSettings ): BackupSettin
     s3Region: api.s3_region,
     backupUploadRoleArn: api.backup_upload_role_arn,
     backupRestoreRoleArn: api.backup_restore_role_arn,
+    backupDeleteRoleArn: api.backup_delete_role_arn,
     localStoragePath: api.local_storage_path,
 
     retentionEnabled: api.retention_enabled,

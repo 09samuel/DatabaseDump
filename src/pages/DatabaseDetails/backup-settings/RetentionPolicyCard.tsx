@@ -12,8 +12,10 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
   const [editing, setEditing] = useState(false);
 
   const [enabled, setEnabled] = useState(settings.retentionEnabled);
-  const [mode, setMode] = useState(settings.retentionMode ?? "COUNT");
-  const [value, setValue] = useState<number>(settings.retentionValue ?? 1);
+  const [mode, setMode] = useState<BackupSettings["retentionMode"] | null>( settings.retentionMode ?? null);
+  const [value, setValue] = useState<number | null>(settings.retentionValue ?? null );
+
+  const canEnableRetention = settings.storageTarget === "S3" && Boolean(settings.backupDeleteRoleArn);
 
   const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error";  message: string;} | null>(null);
   
@@ -46,6 +48,10 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
   const validate = (): string | null => {
     if (!enabled) return null;
 
+    if (!mode) {
+      return "Please select a retention policy";
+    }
+
     if (!value || value <= 0) {
       return mode === "COUNT"
         ? "Number of backups must be greater than 0"
@@ -54,7 +60,6 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
 
     return null;
   };
-
 
 
   async function handleSave() {
@@ -103,34 +108,48 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
     }
   }
 
-
   return (
-    <>
+    <div className={!canEnableRetention ? "cursor-not-allowed" : ""}>
       <SettingsCard
         title="Retention Policy"
         editing={editing}
         onEdit={() => setEditing(true)}
+        disableEdit={!canEnableRetention}
         onCancel={() => {
           setEnabled(settings.retentionEnabled);
-          setMode(settings.retentionMode ?? "COUNT");
-          setValue(settings.retentionValue ?? 1);
+          setMode(settings.retentionMode ?? null);
+          setValue(settings.retentionValue ?? null);
           setEditing(false);
           setStatusMessage(null);
         }}
         onSave = {handleSave}
       >
+
         <label className="flex items-center gap-2 mb-4">
           <input
             type="checkbox"
-            disabled={!editing}
+            disabled={!editing || !canEnableRetention}
             checked={enabled}
             onChange={(e) => {
-              setEnabled(e.target.checked);
+              const checked = e.target.checked;
+              setEnabled(checked);
+
+              if (!checked) {
+                setMode(null);
+                setValue(null);
+              }
+
               clearError();
             }}
           />
           Enable retention policy
         </label>
+
+        {editing && !canEnableRetention && (
+          <p className="text-xs text-red-600 mt-1">
+            Retention requires S3 storage and a Backup Delete Role ARN.
+          </p>
+        )}
 
         <label className="flex items-center gap-2">
           <input
@@ -149,10 +168,11 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
         <input
           type="number"
           disabled={!editing || !enabled || mode !== "COUNT"}
-          value={enabled && mode === "COUNT" ? value : ""}
+          value={enabled && mode === "COUNT" ? value ?? "" : ""}
           onChange={(e) => {
-            setValue(Number(e.target.value));
-            clearError()
+            const v = e.target.value;
+            setValue(v === "" ? null : Number(v));
+            clearError();
           }}
           className="w-full border rounded px-3 py-2 disabled:opacity-60"
         />
@@ -173,7 +193,7 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
         <input
           type="number"
           disabled={!editing || !enabled || mode !== "DAYS"}
-          value={enabled && mode === "DAYS" ? value : ""}
+          value={enabled && mode === "DAYS" ? value ?? "" : ""}
           onChange={(e) => {
             setValue(Number(e.target.value))
             clearError()
@@ -182,6 +202,9 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
           className="w-full border rounded px-3 py-2 disabled:opacity-60"
         />
 
+        <p className="text-xs text-gray-500 mt-2">
+          Retention rules apply only to backups that have not been restored. Restored backups are never deleted automatically.
+        </p>
       </SettingsCard>
 
       {statusMessage && (
@@ -191,7 +214,7 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
           onClose={() => setStatusMessage(null)}
         />
       )}
-    </>
+    </div>
   );
 }
 

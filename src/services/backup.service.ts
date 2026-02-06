@@ -11,7 +11,11 @@ export async function initiateBackup(dbId: string, payload: {backupType: string,
   await api.post(`/backups/${dbId}`, payload)
 }
 
-export async function downloadBackup(backupId: string): Promise<string> {
+export async function downloadBackup(backupId: string): Promise<{ url: string; checksum: string; algo: string }> {
   const res= await api.get(`backups/download/${backupId}`)
-  return res.data.downloadUrl
+  return {
+    url: res.data.downloadUrl,
+    checksum: res.data.checksum,
+    algo: res.data.checksumAlgo,
+  };
 }

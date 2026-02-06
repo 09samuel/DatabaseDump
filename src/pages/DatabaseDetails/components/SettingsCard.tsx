@@ -13,33 +13,33 @@ function SettingsCard({ title, editing, disableEdit, onEdit, onCancel, onSave, c
   return (
     <div className="rounded-xl border bg-white p-6">
         <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
-
+            <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{title}</h3>
+            
             {!editing ? (
-            <button
-                onClick={onEdit}
-                disabled={disableEdit}
-                // className="text-sm text-blue-600 hover:underline"
-                className={`text-sm text-blue-600 ${
-                    disableEdit
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer hover:underline"
-                }`}
-            >
-                Edit settings
-            </button>
-            ) : (
-            <div className="flex gap-4">
-                <button className="text-sm text-green-600 hover:underline" onClick={onSave}>
-                Save
-                </button>
                 <button
-                onClick={onCancel}
-                className="text-sm text-gray-500 hover:underline"
+                    onClick={onEdit}
+                    disabled={disableEdit}
+                    // className="text-sm text-blue-600 hover:underline"
+                    className={`text-sm text-blue-600 ${
+                        disableEdit
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:underline"
+                    }`}
                 >
-                Cancel
+                    Edit settings
                 </button>
-            </div>
+            ) : (
+                <div className="flex gap-4">
+                    <button className="text-sm text-green-600 hover:underline" onClick={onSave}>
+                    Save
+                    </button>
+                    <button
+                    onClick={onCancel}
+                    className="text-sm text-gray-500 hover:underline"
+                    >
+                    Cancel
+                    </button>
+                </div>
             )}
         </div>
 

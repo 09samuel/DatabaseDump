@@ -56,17 +56,22 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
         try {
             setDownloading(true);
 
-            const url = await downloadBackup(backupId);
+            const { url, checksum, algo } = await downloadBackup(backupId);
+
+            // Trigger browser download
             window.location.href = url;
 
+            // Show integrity info (not "success")
             setStatusMessage({
                 type: "success",
-                message: "Download successful",
+                message: `Download started. Verify ${algo.toUpperCase()} checksum after download.`,
             });
 
         } catch (err: any) {
-            alert(err.message ?? "Failed to download backup");
-            setStatusMessage({type: "error", message: err?.response?.data?.message || "Failed to download backup"})
+            setStatusMessage({
+            type: "error",
+            message: err?.response?.data?.message || "Failed to download backup",
+            });
         } finally {
             setDownloading(false);
         }

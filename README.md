@@ -81,7 +81,7 @@ The system supports **MySQL, PostgreSQL, and MongoDB**, with features such as **
 ##  Repository Structure
 
 - **Frontend / Control Plane:** This repository  
-- **Backend: **[API Backend](https://github.com/09samuel/db-dump-backend)** (separate repository)  
+- **Backend:** [API Backend](https://github.com/09samuel/db-dump-backend)** (separate repository)  
 
 ---
 
