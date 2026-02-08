@@ -154,13 +154,15 @@ function DatabasesPage() {
       </div>
 
       {/* Statistics Row / Skeleton */}
-      {isLoading ? (
-        <StatsRowSkeleton /> 
-      ) : error? (
-        <ErrorStatsRowState/>
-      ) : (
-        <StatsRow stats= {stats}/>
-      )}
+      <div className="hidden md:block">
+        {isLoading ? (
+          <StatsRowSkeleton /> 
+        ) : error? (
+          <ErrorStatsRowState/>
+        ) : (
+          <StatsRow stats= {stats}/>
+        )}
+      </div>
 
       {/* Database List / Skeleton */}
       <div className="mt-8 flex flex-col flex-1 min-h-0 overflow-y-auto">

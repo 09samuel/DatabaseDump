@@ -16,10 +16,10 @@ function StatsCard({
   buttonBorderColor = "border-white",
 }: StatsCardProps) {    
     return (
-        <div className={`flex flex-col ${backgroundColor} rounded-2xl ${textColor} p-4 w-56 h-32`}>
-            <div className="flex items-center justify-between">
-                <span className="text-md font-semibold mb-2">{title}</span>
-                <button className={`bg-white text-black border ${buttonBorderColor} rounded-full p-2`}>
+        <div className={`flex flex-col ${backgroundColor} rounded-2xl ${textColor} p-4 w-56 h-32 snap-start shrink-0`}>
+           <div className="flex items-start justify-between gap-2">
+                <span className="text-md font-semibold mb-2 truncate">{title}</span>
+                <button className={`shrink-0 bg-white text-black border ${buttonBorderColor} rounded-full p-2`}>
                     <ArrowUpRight className="h-4 w-4"/>
                 </button>
             </div>
