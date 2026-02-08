@@ -3,6 +3,7 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import Topbar from '../../components/Topbar/Topbar'
 import UserActions from '../../components/Topbar/UserActions'
 import { Outlet, useLocation } from 'react-router-dom'
+import BottomNav from '../../components/Sidebar/BottomNav'
 
 
 function DashboardLayout() {
@@ -35,7 +36,10 @@ function DashboardLayout() {
         <main className="flex-1 overflow-hidden mb-2 mr-2">
           <Outlet context={{ dbSearch }} />
         </main>
+
+      
       </div>
+      <BottomNav/>
     </div>
   )
 }

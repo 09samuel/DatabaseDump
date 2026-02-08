@@ -1,12 +1,7 @@
 import { useState } from "react"
 import Logo from "../../assets/react.svg"
 import SidebarItem from "./SidebarItem"
-
-import {
-  dashboardMenuItems,
-  dashboardGeneralItems,
-} from "./menuItems"
-
+import { dashboardMenuItems, dashboardGeneralItems } from "./menuItems"
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState('Dashboard')
