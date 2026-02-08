@@ -34,13 +34,11 @@ function DatabaseRow({ db, onBackup, onEdit, onDelete }: DatabaseRowProps) {
       onClick={() => navigate(`/databases/${db.id}`)}
       className="bg-[#f7f7f7] text-[#8e9c97] hover:bg-green-100 cursor-pointer"
     >
-      <td className="px-6 py-2 rounded-l-lg border-b">
-        {db.name}
-      </td>
-      <td className="border-b">{db.engine}</td>
+      <td className="px-6 py-2 rounded-l-lg border-b max-w-50 truncate">{db.name}</td>
+      <td className="border-b max-w-30 truncate">{db.engine}</td>
       <td className="border-b">{db.environment}</td>
-      <td className="border-b">{db.status}</td>
-      <td className="border-b">{formatDateTime(db.lastBackupAt)?? '--'}</td>
+      <td className="border-b hidden md:table-cell">{db.status}</td>
+      <td className="border-b hidden md:table-cell">{formatDateTime(db.lastBackupAt)?? '--'}</td>
       <td className="px-6 text-right rounded-r-lg border-b relative">
         <div className="flex gap-2 justify-end">
           <button title="Backup Database" className="p-1 hover:text-green-600 cursor-pointer">
