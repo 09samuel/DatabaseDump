@@ -8,7 +8,7 @@ function Sidebar() {
   const [expanded, setExpanded] = useState(true)
 
   return (
-    <aside className="hidden md:block h-screen p-2">
+    <aside className="hidden md:block h-full">
       <nav className={`h-full bg-[#f7f7f7] border rounded-lg ${expanded ? "w-64" : "w-16"}`}>
         <div
           className="p-4 flex justify-center items-center"

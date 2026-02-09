@@ -12,7 +12,7 @@ function UserActions() {
                     <UserCircle className="w-6 h-6 text-black" />
                 </button>
 
-                <div className="flex flex-col leading-tight">
+                <div className="md:flex md:flex-col hidden leading-tight">
                     <span className="text-sm font-medium text-black">
                         John Doe
                     </span>

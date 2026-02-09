@@ -352,7 +352,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 px-4 py-6 sm:px-6 sm:py-10"
        
             onClick={(e) => {
                 if (e.target === e.currentTarget) {
@@ -360,7 +360,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                 }
             }}
         >
-            <form  onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-lg">
+            <form  onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-md max-h-[90vh] bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-1" >
                     <span className="text-2xl font-semibold">Add Database</span>
                     <span className="text-[#8e9c97]">
@@ -370,7 +370,8 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
             
 
                 {/* Form fields container */}
-                <div className="flex flex-col gap-4 max-w-md">
+                <div className="flex flex-col gap-4 max-w-md overflow-y-auto md:no-scrollbar flex-1 min-h-0">
+                {/* <div className="flex-1 min-h-0"></div> */}
                     <input
                         type="text"
                         value={databaseName}

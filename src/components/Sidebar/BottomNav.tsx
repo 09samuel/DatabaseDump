@@ -6,7 +6,7 @@ function BottomNav() {
     const [activeItem, setActiveItem] = useState('Dashboard')
 
     return (
-        <nav className="fixed bottom-3 left-3 right-3 z-50 bg-white md:hidden">
+        <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white md:hidden">
             <ul className="flex justify-around items-center h-14 rounded-xl shadow border">
                 {items.map((item) => (
                 <li key={item.name}>
