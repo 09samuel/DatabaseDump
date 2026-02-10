@@ -41,7 +41,7 @@ function DatabaseOverviewTab() {
   },[id])    
 
 
-  if (true && !loading) {
+  if (error && !loading) {
     return (
       <ErrorState errorMessage={error} />
     );
