@@ -12,7 +12,7 @@ type DatabaseListProps = {
 function DatabaseList( { databases, onBackup, onEdit, onDelete }: DatabaseListProps) {
   return (
     <div>
-      <table className="w-full border-separate border-spacing-y-2">
+      <table className="w-full border-separate border-spacing-y-2 table-fixed">
         <thead className="sticky top-0 z-10">
           <DatabaseRowHeader/>
         </thead>
