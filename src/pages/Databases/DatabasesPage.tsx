@@ -28,7 +28,7 @@ function DatabasesPage() {
 
   const { dbSearch } =  useOutletContext<{ dbSearch: string }>()
 
-  const isLoading = true
+  const isLoading = status === "loading"
   const error = status === "error"
   const isEmpty = status === "empty"
 
@@ -125,8 +125,6 @@ function DatabasesPage() {
   function handleBackup(db: Database) {
     setBackupDb(db)
   }
-
-
 
 
   return (

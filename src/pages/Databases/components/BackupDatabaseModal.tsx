@@ -124,7 +124,7 @@ function BackupDatabaseModal({ dbId, dbName, engine, environment, onClose, onBac
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 px-4 py-6 sm:px-6 sm:py-10"
        
             onClick={(e) => {
                 if (e.target === e.currentTarget) {
@@ -144,9 +144,6 @@ function BackupDatabaseModal({ dbId, dbName, engine, environment, onClose, onBac
                         <span>Database Engine: {engine}</span>
                         <span>Environment: {environment}</span>
                     </div>
-
-           
-                    
 
                     {/* PostgreSQL / MySQL */}
                     {(engine.toLowerCase() === "postgresql" || engine.toLowerCase() === "mysql") && (
@@ -212,20 +209,16 @@ function BackupDatabaseModal({ dbId, dbName, engine, environment, onClose, onBac
                         placeholder="Backup Name"
                         className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
                     />
-{/* 
-                    <span>Storage destination: {storage}</span> */}
 
-                    {/* TODO: DEAL WITH NULL PROPERLY */}
                     <div className="text-sm text-gray-600">
                         <div>Storage:  {backupSettings?.storageTarget}</div>
                         <div>
                             Retention:
                             {backupSettings?.retentionEnabled
-                            ? `${backupSettings?.retentionValue} ${backupSettings?.retentionMode?.toLowerCase()}`
-                            : "Disabled"}
+                            ? ` ${backupSettings?.retentionValue} ${backupSettings?.retentionMode?.toLowerCase()}`
+                            : " Disabled"}
                         </div>
                     </div>
-
 
 
                     <div className="flex gap-3 mt-4 max-w-md">
@@ -249,7 +242,7 @@ function BackupDatabaseModal({ dbId, dbName, engine, environment, onClose, onBac
                     </div>
 
                     {/* Helper text */}
-                    <div className="flex items-start gap-2 text-sm text-gray-500 max-w-md">
+                    <div className="flex items-start gap-2 text-gray-500 max-w-md">
                         <Info className="w-4 h-4 shrink-0 mt-0.5" />
                         <span className="min-w-0">
                             Backups may take several minutes to complete depending on the size of the database. You will be notified once the backup is ready.
