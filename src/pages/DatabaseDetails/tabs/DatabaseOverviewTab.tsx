@@ -41,19 +41,15 @@ function DatabaseOverviewTab() {
   },[id])    
 
 
-  if (error && !loading) {
+  if (true && !loading) {
     return (
-      <div className="p-6 rounded-xl border bg-white min-h-113.5 flex items-center justify-center me-2">
-        <ErrorState errorMessage={error} />
-      </div>
+      <ErrorState errorMessage={error} />
     );
   }
 
   if (!data && !loading) {
     return (
-      <div className="p-6 rounded-xl border bg-white min-h-113.5  flex items-center justify-center me-2">
-        <EmptyState icon={ Library } mainMessage={"No data found"} subMessage={""} />
-      </div>
+      <EmptyState icon={ Library } mainMessage={"No data found"} subMessage={""} />
     );
   }
 
@@ -65,7 +61,7 @@ function DatabaseOverviewTab() {
 
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2 pb-24 md:pb-0">
       {/* BIG: Database Overview */}
       <div className={`md:col-span-2 md:row-span-2 rounded-xl border min-h-65 p-6 ${skeleton}`}>
         <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>

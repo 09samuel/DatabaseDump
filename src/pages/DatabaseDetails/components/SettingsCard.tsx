@@ -13,7 +13,7 @@ function SettingsCard({ title, editing, disableEdit, onEdit, onCancel, onSave, c
   return (
     <div className="rounded-xl border bg-white p-6">
         <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{title}</h3>
+            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
             
             {!editing ? (
                 <button
@@ -26,7 +26,8 @@ function SettingsCard({ title, editing, disableEdit, onEdit, onCancel, onSave, c
                         : "cursor-pointer hover:underline"
                     }`}
                 >
-                    Edit settings
+                    <span className="inline md:hidden">Edit</span>
+                    <span className="hidden md:inline">Edit settings</span>
                 </button>
             ) : (
                 <div className="flex gap-4">

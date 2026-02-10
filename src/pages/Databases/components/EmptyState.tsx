@@ -13,7 +13,7 @@ function EmptyState({icon: Icon, mainMessage, subMessage}: EmptyStateProps) {
         <span className="text-xl font-semibold text-gray-900 mb-2">
             {mainMessage}
         </span>
-        <span className="text-gray-500 max-w-md">
+        <span className="text-gray-500 max-w-md text-sm md:text-base">
             {subMessage}
         </span>
     </div>

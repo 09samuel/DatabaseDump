@@ -40,23 +40,19 @@ function DatabaseBackupsTab() {
 
   if (error && !loading) {
     return (
-      <div className="p-6 rounded-xl border bg-white min-h-113.5 flex items-center justify-center me-2">
-        <ErrorState errorMessage={error} />
-      </div>
+      <ErrorState errorMessage={error} />
     );
   }
 
   if ( backups?.length === 0 && !loading) {
     return (
-      <div className="p-6 rounded-xl border bg-white min-h-113.5  flex items-center justify-center me-2">
-        <EmptyState icon={ DatabaseBackup} mainMessage={"No backups found"} subMessage={"Get started by creating your first backup"} />
-      </div>
+      <EmptyState icon={ DatabaseBackup} mainMessage={"No backups found"} subMessage={"Get started by creating your first backup"} />
     );
   }
 
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 me-2 mb-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 me-2 mb-4 pb-24 md:pb-0">
       {loading
         ? Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="h-65 rounded-xl border bg-gray-200 animate-pulse" />

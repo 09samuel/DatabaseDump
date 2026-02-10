@@ -79,14 +79,12 @@ export default function DatabaseBackupSettingsTab() {
 
   if (error && !loading) {
     return (
-      <div className="p-6 rounded-xl border bg-white min-h-113.5 flex items-center justify-center me-2">
-        <ErrorState errorMessage={error} />
-      </div>
+      <ErrorState errorMessage={error} />
     );
   }
 
   return (
-    <div className="space-y-6 me-2 mb-4">
+    <div className="space-y-6 me-2 mb-4 pb-24 md:pb-0 text-sm md:text-base">
       {loading ? (
         <>
           <div className="min-h-80.25 rounded-xl border bg-gray-200 animate-pulse" />

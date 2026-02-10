@@ -29,7 +29,7 @@ function DatabasesPage() {
   const { dbSearch } =  useOutletContext<{ dbSearch: string }>()
 
   const isLoading = status === "loading"
-  const error = status === "error"
+  const error = true
   const isEmpty = status === "empty"
 
 

@@ -60,18 +60,18 @@ function DatabaseDetailsPage() {
                     {loading ? (
                         <div className={`${skeleton} w-64 h-7`} />
                     ) : error ? (
-                        <span className="text-2xl font-semibold leading-none">
+                        <span className="text-xl md:text-2xl font-semibold leading-none">
                             Database Name
                         </span>
                     ) : (
-                        <span className="text-2xl font-semibold leading-none">
+                        <span className="text-xl md:text-2xl font-semibold leading-none">
                             {data?.name}
                         </span>
                     )}
                 </div>
 
 
-                <div className="flex gap-2 text-gray-400 items-center">
+                <div className="flex gap-2 text-gray-400 items-center text-sm md:text-base">
                     {loading ? (
                         <>
                             <div className={`${skeleton} h-4 w-28`} />
@@ -103,20 +103,20 @@ function DatabaseDetailsPage() {
 
                 {/* Tabs */}
                 <div className="border-b">
-                    <ul className="flex gap-8 mt-6">
+                    <ul className="flex justify-center md:justify-start gap-6 md:gap-8 mt-6">
                         <li>
                             <NavLink
                                 to="."
                                 end
                                 className={({ isActive }) =>
-                                    `inline-flex items-center gap-2 pb-2 border-b-2 ${
+                                    `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
                                         ? "border-black font-medium"
                                         : "border-transparent text-gray-500"
                                     }`
                                 }
                             >
-                                <Library className="h-4 w-4" />
+                                <Library className="h-4 w-4 hidden md:inline" />
                                 Overview
                             </NavLink>
                         </li>
@@ -125,14 +125,14 @@ function DatabaseDetailsPage() {
                             <NavLink
                                 to="backups"
                                 className={({ isActive }) =>
-                                    `inline-flex items-center gap-2 pb-2 border-b-2 ${
+                                    `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
                                         ? "border-black font-medium"
                                         : "border-transparent text-gray-500"
                                     }`
                                 }
                             >
-                                <DatabaseBackup className="h-4 w-4" />
+                                <DatabaseBackup className="h-4 w-4 hidden md:inline"/>
                                 Backups
                             </NavLink>
                         </li>
@@ -141,14 +141,14 @@ function DatabaseDetailsPage() {
                             <NavLink
                                 to="settings/backups"
                                 className={({ isActive }) =>
-                                    `inline-flex items-center gap-2 pb-2 border-b-2 ${
+                                    `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
                                         ? "border-black font-medium"
                                         : "border-transparent text-gray-500"
                                     }`
                                 }
                             >
-                                <Settings className="h-4 w-4" />
+                                <Settings className="h-4 w-4 hidden md:inline" />
                                 Backup Settings
                             </NavLink>
                         </li>
