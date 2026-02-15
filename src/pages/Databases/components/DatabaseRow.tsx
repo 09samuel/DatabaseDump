@@ -41,8 +41,8 @@ function DatabaseRow({ db, onBackup, onEdit, onDelete }: DatabaseRowProps) {
       <td className="border-b w-3/12 hidden md:table-cell">{formatDateTime(db.lastBackupAt)?? '--'}</td>
       <td className="px-6 w-2/12 text-right rounded-r-lg border-b relative">
         <div className="flex gap-2 justify-end">
-          <button title="Backup Database" className="p-1 hover:text-green-600 cursor-pointer">
-            <DatabaseBackup className="h-4 w-4 inline-block" onClick={(e) => {e.stopPropagation(); onBackup(db)}}/>
+          <button title="Backup Database" onClick={(e) => {e.stopPropagation(); onBackup(db)}} className="p-1 hover:text-green-600 cursor-pointer">
+            <DatabaseBackup className="h-4 w-4 inline-block" />
           </button>
           <div className="inline-flex flex-col items-end">
             <DatabaseActionsMenu onEdit={() => onEdit(db)} onDelete={() => onDelete(db)}/>
