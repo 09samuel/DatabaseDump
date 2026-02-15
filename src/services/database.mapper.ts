@@ -1,4 +1,4 @@
-import type { BackupStatus, ConnectionStatus, Database, DatabaseBasicDetails, DatabaseDetails, DatabaseOverview } from "../pages/Databases/types"
+import type { BackupStatus, ConnectionStatus, Database, DatabaseBasicDetails, DatabaseDetails, DatabaseOverview, DatabaseEngine, SSLMode } from "../pages/Databases/types"
 
 type ApiDatabase = {
   id: string
@@ -11,13 +11,14 @@ type ApiDatabase = {
   storageUsedGB: number
 }
 
-type ApiDatabaseDetails =  {
+type ApiDatabaseDetails = {
   dbName: string
   dbHost: string
-  dbPort: number
+  dbPort: number | null
   dbEngine: string
   environment: string
-  dbUsername: string
+  dbUsername: string | null
+  sslMode: string | null
 }
 
 type ApiDatabaseOverview = {
@@ -27,6 +28,7 @@ type ApiDatabaseOverview = {
   db_host: string
   db_port: string | number
   status: string
+  ssl_mode: string | null
   last_backup_at: string | null
   last_storage_target: string
   storage_used_bytes: number
@@ -59,7 +61,8 @@ export function mapDatabaseDetailsFromApi(db: ApiDatabaseDetails): DatabaseDetai
     dbPort: db.dbPort,
     dbEngine: normalizeEngine(db.dbEngine),
     environment: db.environment,
-    dbUsername: db.dbUsername
+    dbUsername: db.dbUsername,
+    sslMode: normalizeSSLMode(db.sslMode)
   }
 }
 
@@ -75,6 +78,7 @@ export function mapDatabaseOverviewFromApi(db: ApiDatabaseOverview): DatabaseOve
     lastBackupStatus: "Success",
     lastStorageTarget: db.last_storage_target,
     totalstorageUsed: db.storage_used_bytes,
+    sslMode: normalizeSSLMode(db.ssl_mode)
   }
     
 }
@@ -89,19 +93,20 @@ export function mapDatabaseBasicDetailsFromApi(db: ApiDatabseBasicDetails): Data
 }
 
 
-export function normalizeEngine(engine: string): Database["engine"] {
+export function normalizeEngine(engine: string): DatabaseEngine {
   switch (engine.toUpperCase()) {
     case "POSTGRES":
     case "POSTGRESQL":
-      return "PostgreSQL"
+      return "postgresql"
     case "MYSQL":
-      return "MySQL"
+      return "mysql"
     case "MONGODB":
-      return "MongoDB"
+      return "mongodb"
     default:
       throw new Error(`Unknown engine: ${engine}`)
   }
 }
+
 
 function normalizeStatus(status: string): ConnectionStatus {
   switch (status) {
@@ -137,3 +142,16 @@ function normalizeBackupStatus(status: string | null ): BackupStatus | null {
   }
 }
 
+function normalizeSSLMode(mode: string | null): SSLMode | null {
+  if (!mode) return null;
+
+  switch (mode) {
+    case "disable":
+    case "require":
+    case "verify-ca":
+    case "verify-full":
+      return mode;
+    default:
+      throw new Error(`Unknown SSL mode: ${mode}`);
+  }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Info } from "lucide-react";
-import type { BackendVerifyState, VerifyState } from "../types";
+import type { BackendVerifyState, DatabaseEngine, SSLMode, VerifyState } from "../types";
 import { addDatabase, getConnectionStatus, verifyConnection, verifyDryRun } from "../../../services/database.service";
 import StatusBar from "../../../components/StatusBar/StatusBar";
 
@@ -12,11 +12,12 @@ type AddDatabaseModalProps = {
 function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
     const [databaseName, setDatabaseName] = useState("");
     const [host, setHost] = useState("");
-    const [port, setPort] = useState<number | string>("");
-    const [dbEngine, setDbEngine] = useState("");
+    const [port, setPort] = useState<number | string | null>("");
+    const [dbEngine, setDbEngine] = useState<DatabaseEngine | null>(null);
     const [environment, setEnvironment] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [sslMode, setSslMode] = useState<SSLMode | null>("disable");
 
     const [loading, setLoading] = useState(false)
     const [, setError] = useState<string | null>(null)
@@ -63,6 +64,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
             setUsername(data.username ?? "");
             setPassword(""); // Don't persist password for security
             setVerifyState(data.verifyState ?? "idle");
+            setSslMode(data.sslMode ?? null);
         } catch {
             localStorage.removeItem(STORAGE_KEY);
         }
@@ -84,10 +86,11 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
             environment,
             username,
             verifyState,
+            sslMode
         };
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }, [databaseName, host, port, dbEngine, environment, username, verifyState]);
+    }, [databaseName, host, port, dbEngine, environment, username, verifyState, sslMode]);
 
 
     // Reset verification state when credentials change
@@ -95,7 +98,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         if (verifyState === "success") {
             setVerifyState("idle");
         }
-    }, [databaseName, host, port, dbEngine, username, password]);
+    }, [databaseName, host, port, dbEngine, username, password, sslMode]);
 
 
     //clear form errors on input change
@@ -103,7 +106,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         if (formErrors.length > 0) {
             setFormErrors([])
         }
-    }, [databaseName, host, port, dbEngine, environment, username, password])
+    }, [databaseName, host, port, dbEngine, environment, username, password, sslMode])
 
 
 
@@ -180,13 +183,17 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         setVerifyError(null)
 
         try {
+            if (!dbEngine) return;
+
             await verifyDryRun({
+                connectionId: null,
                 dbType: dbEngine,
-                dbHost: host,
-                dbPort: Number(port),
-                dbName: databaseName,
-                dbUserName: username,
-                dbUserSecret: password,
+                dbHost: host?.trim(),
+                dbPort: port ? Number(port) : null,
+                dbName: databaseName?.trim(),
+                dbUserName: username?.trim() || null,
+                dbUserSecret: password?.trim() || null,
+                sslMode: sslMode || null,
             })
 
             setVerifyState("success")
@@ -229,14 +236,17 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         setError(null)
 
         try {
+            if (!dbEngine) return;
+
             const db = await addDatabase({
                 dbType: dbEngine,
-                dbHost: host,
-                dbPort: Number(port),
-                dbName: databaseName,
+                dbHost: host?.trim(),
+                dbPort: port ? Number(port) : null,
+                dbName: databaseName?.trim(),
                 envTag: environment,
-                dbUserName: username,
-                dbUserSecret: password,
+                dbUserName: username?.trim() || null,
+                dbUserSecret: password?.trim() || null,
+                sslMode: sslMode || null,
             })
 
             setStatusMessage({
@@ -271,10 +281,11 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         setDatabaseName("")
         setHost("")
         setPort("")
-        setDbEngine("")
+        setDbEngine(null)
         setEnvironment("")
         setUsername("")
         setPassword("")
+        setSslMode(null)
 
         setVerifyState("idle")
         setVerifyError(null)
@@ -314,10 +325,13 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
             errors.push("Host must be a valid hostname or IP address");
         }
 
-        // Port: required, valid range
+        // Port: required, valid range unless mongodb
         const portNum = Number(port);
-        if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
-            errors.push("Port must be a valid number between 1–65535");
+
+        if (dbEngine !== "mongodb") {
+            if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
+                errors.push("Port must be a valid number between 1–65535");
+            }
         }
 
         // Engine: required
@@ -330,24 +344,60 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
             errors.push("Environment is required");
         }
 
-        // Username: required, 1–64 chars
-        if (!trimmedUsername) {
-            errors.push("Username is required");
-        } else if (trimmedUsername.length > 64) {
-            errors.push("Username must be at most 64 characters");
+        // Username & Password validation
+        if (dbEngine === "postgresql") {
+            if (!trimmedUsername) {
+                errors.push("Username is required");
+            }
+
+            if (!trimmedPassword) {
+                errors.push("Password is required");
+            }
+
+        } else if (dbEngine === "mysql") {
+            if (!trimmedUsername) {
+                errors.push("Username is required");
+            }
+
+            // Password optional for MySQL
+            if (trimmedPassword.length > 128) {
+                errors.push("Password must be at most 128 characters");
+            }
+        } else {
+            // MongoDB
+            // If one is provided, both must be provided
+            if ((trimmedUsername && !trimmedPassword) || (!trimmedUsername && trimmedPassword)) {
+                errors.push("Both username and password are required when using MongoDB authentication");
+            }
+
+            if (trimmedUsername.length > 64) {
+                errors.push("Username must be at most 64 characters");
+            }
+
+            if (trimmedPassword.length > 128) {
+                errors.push("Password must be at most 128 characters");
+            }
         }
 
-        // Password: required, 1–128 chars
-        if (!trimmedPassword) {
-            errors.push("Password is required");
-        } else if (trimmedPassword.length > 128) {
-            errors.push("Password must be at most 128 characters");
+        // SSL validation (Postgres & MySQL only)
+        if (dbEngine === "postgresql") {
+        const validPgModes = ["disable", "require", "verify-ca", "verify-full"];
+
+            if (!sslMode || !validPgModes.includes(sslMode)) {
+                errors.push("Invalid SSL mode selected for PostgreSQL");
+            }
+        }
+
+        if (dbEngine === "mysql") {
+            const validMysqlModes = ["disable", "require"];
+
+            if (!sslMode || !validMysqlModes.includes(sslMode)) {
+                errors.push("Invalid SSL mode selected for MySQL");
+            }
         }
 
         return errors;
     };
-
-
 
 
     return (
@@ -392,12 +442,16 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
                     <input
                         type="number"
-                        value={port}
+                        value={port === null ? "" : port}
                         disabled={isLocked}
-                        onChange={(e) => setPort(e.target.value)}  
-                        placeholder="Port"
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
+                        onChange={(e) => {
+                            const v = e.target.value;
+                            setPort(v === "" ? null : Number(v));
+                        }}
+                        placeholder={dbEngine === "mongodb" ? "Not required for MongoDB Atlas" : "Port"}
+                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100"
+                     />
+
 
                     {/* Database Engine */}
                     <div className="flex flex-col gap-1">
@@ -406,9 +460,9 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                     </label>
                     <select
                         id="dbEngine"
-                        value={dbEngine}
+                        value={dbEngine ?? ""}
                         disabled={isLocked}
-                        onChange={(e) => setDbEngine(e.target.value)} 
+                        onChange={(e) => setDbEngine(e.target.value === "" ? null : (e.target.value as DatabaseEngine)) }
                         className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
                         <option value="">Select engine</option>
@@ -417,6 +471,43 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         <option value="mongodb">MongoDB</option>
                     </select>
                     </div>
+
+                    {/* SSL Mode */}
+                    {(dbEngine === "postgresql" || dbEngine === "mysql") && (
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="sslMode" className="font-medium">
+                            SSL Mode
+                            </label>
+                            <select
+                                id="sslMode"
+                                value={sslMode ?? "disable"}
+                                disabled={isLocked}
+                                onChange={(e) => setSslMode(e.target.value === "" ? null : (e.target.value as SSLMode)) }
+                                className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            >
+                            {dbEngine === "postgresql" && (
+                                <>
+                                <option value="disable">Disable</option>
+                                <option value="require">Require</option>
+                                <option value="verify-ca">Verify CA</option>
+                                <option value="verify-full">Verify Full</option>
+                                </>
+                            )}
+
+                            {dbEngine === "mysql" && (
+                                <>
+                                <option value="disable">Disable</option>
+                                <option value="require">Require</option>
+                                </>
+                            )}
+                            </select>
+
+                            <span className="text-xs text-gray-500">
+                            Hosted databases usually require SSL.
+                            </span>
+                        </div>
+                    )}
+
 
                     {/* Environment */}
                     <div className="flex flex-col gap-1">

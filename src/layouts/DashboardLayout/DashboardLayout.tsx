@@ -26,24 +26,24 @@ function DashboardLayout() {
           rightActions: <UserActions />,
         }
 
-return (
- <div className="flex h-screen w-full p-4 gap-4">
-    
-    <aside className="hidden md:flex shrink-0">
-      <Sidebar />
-    </aside>
+  return (
+  <div className="flex h-screen w-full p-4 gap-4">
+      
+      <aside className="hidden md:flex shrink-0">
+        <Sidebar />
+      </aside>
 
-    <div className="flex flex-col flex-1 min-w-0 min-h-0 gap-4">
-      <Topbar {...topbarProps} />
+      <div className="flex flex-col flex-1 min-w-0 min-h-0 gap-4">
+        <Topbar {...topbarProps} />
 
-      <main className="flex flex-col flex-1 min-h-0">
-        <Outlet context={{ dbSearch }} />
-      </main>
+        <main className="flex flex-col flex-1 min-h-0">
+          <Outlet context={{ dbSearch }} />
+        </main>
+      </div>
+
+      <BottomNav />
     </div>
-
-    <BottomNav />
-  </div>
-)
+  )
 
 }
 

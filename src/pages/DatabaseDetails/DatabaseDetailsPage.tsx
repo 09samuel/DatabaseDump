@@ -107,6 +107,7 @@ function DatabaseDetailsPage() {
                         <li>
                             <NavLink
                                 to="."
+                                replace={true}
                                 end
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
@@ -124,6 +125,7 @@ function DatabaseDetailsPage() {
                         <li>
                             <NavLink
                                 to="backups"
+                                replace={true}
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
@@ -140,6 +142,7 @@ function DatabaseDetailsPage() {
                         <li>
                             <NavLink
                                 to="settings/backups"
+                                replace={true}
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive

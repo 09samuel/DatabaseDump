@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { BackendVerifyState, DatabaseDetails, UpdateDatabasePayload, VerifyState } from "../types";
+import { type DatabaseEngine, type BackendVerifyState, type DatabaseDetails, type UpdateDatabasePayload, type VerifyState, type SSLMode } from "../types";
 import {  getConnectionStatus, getDatabaseDetails, updateDatabase, verifyConnection, verifyDryRun } from "../../../services/database.service";
 import StatusBar from "../../../components/StatusBar/StatusBar";
 
@@ -13,11 +13,12 @@ type EditDatabaseModalProps = {
 function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps) {
     const [databaseName, setDatabaseName] = useState("");
     const [host, setHost] = useState("");
-    const [port, setPort] = useState<number | string>("");
-    const [dbEngine, setDbEngine] = useState("");
+    const [port, setPort] = useState<number | string | null>(null);
+    const [dbEngine, setDbEngine] = useState<DatabaseEngine | null>(null);
     const [environment, setEnvironment] = useState("");
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState<string | null>();
     const [password, setPassword] = useState("");
+    const [sslMode, setSslMode] = useState<SSLMode | null>(null)
 
     //to track original details for comparison for changes
     const [original, setOriginal] = useState<DatabaseDetails | null>(null);
@@ -45,15 +46,19 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
         const payload: UpdateDatabasePayload = {};  
 
-        if (databaseName !== original.dbName) payload.dbName = databaseName;
-        if (host !== original.dbHost) payload.dbHost = host;
-        if (Number(port) !== original.dbPort) payload.dbPort = Number(port);
-        if (dbEngine !== original.dbEngine) payload.dbEngine = dbEngine;
+        if (databaseName !== original.dbName) payload.dbName = databaseName.trim();
+        if (host !== original.dbHost) payload.dbHost = host.trim();
+        
+        const normalizedPort = port === "" || port === null ? null : Number(port);
+        if (normalizedPort !== original.dbPort) payload.dbPort = normalizedPort;
+        
+        if (dbEngine && dbEngine !== original.dbEngine)  payload.dbEngine = dbEngine;
         if (environment !== original.environment) payload.environment = environment;
-        if (username !== original.dbUsername) payload.dbUsername = username;
+        if (username !== original.dbUsername) payload.dbUsername =  username?.trim() ?? null;
+        if (sslMode != original.sslMode) payload.sslMode = sslMode
 
         // password ONLY if user entered it
-        if (password.trim()) payload.dbUserSecret = password;
+        if (password.trim()) payload.dbUserSecret = password.trim();
 
         return payload;
     };
@@ -61,16 +66,20 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
     // Determines if verification is needed based on changed fields
     const needsVerification = () => {
-        if (!original) return false;
+    if (!original) return false;
 
-        return (
-            host !== original.dbHost ||
-            Number(port) !== original.dbPort ||
-            dbEngine !== original.dbEngine ||
-            username !== original.dbUsername ||
-            password.trim().length > 0
-        );
-    };
+    const normalizedPort = port === "" || port === null ? null : Number(port);
+
+    return (
+        host !== original.dbHost ||
+        normalizedPort !== original.dbPort ||
+        dbEngine !== original.dbEngine ||
+        username !== original.dbUsername ||
+        password.trim().length > 0 ||
+        sslMode !== original.sslMode
+    );
+};
+
 
 
 
@@ -89,6 +98,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
                 setDbEngine(db.dbEngine);
                 setEnvironment(db.environment);
                 setUsername(db.dbUsername);
+                setSslMode(db.sslMode)
 
             } catch (error) {
                 console.error("Error loading saved form data:", error);
@@ -114,7 +124,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         if (verifyState === "success") {
             setVerifyState("idle");
         }
-    }, [databaseName, host, port, dbEngine, username, password]);
+    }, [databaseName, host, port, dbEngine, username, password, sslMode]);
 
 
     //clear form errors on input change
@@ -122,7 +132,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         if (formErrors.length > 0) {
             setFormErrors([])
         }
-    }, [databaseName, host, port, dbEngine, environment, username, password])
+    }, [databaseName, host, port, dbEngine, environment, username, password, sslMode])
 
 
 
@@ -197,13 +207,17 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         setVerifyError(null)
 
         try {
-            await verifyDryRun({
+            if (!dbEngine) return
+
+             await verifyDryRun({
+                connectionId: dbId,
                 dbType: dbEngine,
-                dbHost: host,
-                dbPort: Number(port),
-                dbName: databaseName,
-                dbUserName: username,
-                dbUserSecret: password,
+                dbHost: host?.trim(),
+                dbPort: port ? Number(port) : null,
+                dbName: databaseName?.trim(),
+                dbUserName: username?.trim() || null,
+                dbUserSecret: password?.trim() || null,
+                sslMode: sslMode || null,
             })
 
             setVerifyState("success")
@@ -255,8 +269,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
             await updateDatabase(dbId, payload)
 
             if (requiresVerification) {
-                setStatusMessage({
-                type: "success",
+                setStatusMessage({ type: "success",
                 message: "Database updated. Verifying connection...",
                 })
                 
@@ -303,7 +316,8 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
         const trimmedDatabaseName = databaseName.trim();
         const trimmedHost = host.trim();
-        const trimmedUsername = username.trim();
+        const trimmedUsername = (username ?? "").trim();
+        const trimmedPassword = password.trim();
 
         // Database name: required, alphanumeric + underscores/dashes, 1–64 chars
         if (!trimmedDatabaseName) {
@@ -329,8 +343,11 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
         // Port: required, valid range
         const portNum = Number(port);
-        if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
-            errors.push("Port must be a valid number between 1–65535");
+
+        if (dbEngine !== "mongodb") {
+            if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
+                errors.push("Port must be a valid number between 1–65535");
+            }
         }
 
         // Engine: required
@@ -343,18 +360,31 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
             errors.push("Environment is required");
         }
 
-        // Username: required, 1–64 chars
-        if (!trimmedUsername) {
-            errors.push("Username is required");
-        } else if (trimmedUsername.length > 64) {
+        // Username & Password validation
+        if (trimmedUsername.length > 64) {
             errors.push("Username must be at most 64 characters");
         }
 
-        // Password: required, 1–128 chars
-        if (!password && !isVerified) {
-            errors.push("Password is required");
+        if (trimmedPassword.length > 128) {
+            errors.push("Password must be at most 128 characters");
         }
 
+        // SSL validation (Postgres & MySQL only)
+        if (dbEngine === "postgresql") {
+        const validPgModes = ["disable", "require", "verify-ca", "verify-full"];
+
+            if (!sslMode || !validPgModes.includes(sslMode)) {
+                errors.push("Invalid SSL mode selected for PostgreSQL");
+            }
+        }
+
+        if (dbEngine === "mysql") {
+            const validMysqlModes = ["disable", "require"];
+
+            if (!sslMode || !validMysqlModes.includes(sslMode)) {
+                errors.push("Invalid SSL mode selected for MySQL");
+            }
+        }
 
         return errors;
     };
@@ -402,10 +432,10 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
                     <input
                         type="number"
-                        value={port}
+                        value={port ?? ""}
                         disabled={isLocked}
                         onChange={(e) => setPort(e.target.value)}  
-                        placeholder="Port"
+                        placeholder={dbEngine === "mongodb" ? "Not required for MongoDB Atlas" : "Port"}
                         className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
                     />
 
@@ -416,9 +446,9 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
                     </label>
                     <select
                         id="dbEngine"
-                        value={dbEngine}
+                        value={dbEngine ?? ""}
                         disabled={isLocked}
-                        onChange={(e) => setDbEngine(e.target.value)} 
+                        onChange={(e) => setDbEngine(e.target.value === "" ? null : (e.target.value as DatabaseEngine)) }
                         className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
                         <option value="">Select engine</option>
@@ -427,6 +457,43 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
                         <option value="mongodb">MongoDB</option>
                     </select>
                     </div>
+
+                    {/* SSL Mode */}
+                    {(dbEngine === "postgresql" || dbEngine === "mysql") && (
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="sslMode" className="font-medium">
+                            SSL Mode
+                            </label>
+                            <select
+                            id="sslMode"
+                            value={sslMode ?? "disable"}
+                            disabled={isLocked}
+                            onChange={(e) => setSslMode(e.target.value === "" ? null : (e.target.value as SSLMode)) }
+                            className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            >
+                            {dbEngine === "postgresql" && (
+                                <>
+                                <option value="disable">Disable</option>
+                                <option value="require">Require</option>
+                                <option value="verify-ca">Verify CA</option>
+                                <option value="verify-full">Verify Full</option>
+                                </>
+                            )}
+
+                            {dbEngine === "mysql" && (
+                                <>
+                                <option value="disable">Disable</option>
+                                <option value="require">Require</option>
+                                </>
+                            )}
+                            </select>
+
+                            <span className="text-xs text-gray-500">
+                            Hosted databases usually require SSL.
+                            </span>
+                        </div>
+                    )}
+
 
                     {/* Environment */}
                     <div className="flex flex-col gap-1">
@@ -449,7 +516,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
 
                     <input
                         type="text"
-                        value={username}
+                        value={username ?? ""}
                         disabled={isLocked}
                         onChange={(e) => setUsername(e.target.value)} 
                         placeholder="Username"
