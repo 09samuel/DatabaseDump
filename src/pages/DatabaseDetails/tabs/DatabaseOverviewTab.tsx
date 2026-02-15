@@ -61,7 +61,7 @@ function DatabaseOverviewTab() {
 
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2 pb-24 md:pb-0">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2 mb-4 pb-24 md:pb-0">
       {/* BIG: Database Overview */}
       <div className={`md:col-span-2 md:row-span-2 rounded-xl border min-h-65 p-6 ${skeleton}`}>
         <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>
@@ -70,19 +70,23 @@ function DatabaseOverviewTab() {
         <dl className={`space-y-3 ${hidden}`}>
           <div>
             <dt className="text-xs text-gray-500">Name</dt>
-            <dd className="text-sm font-medium">{data?.name}</dd>
+            <dd className="text-sm font-medium">{data?.name ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs text-gray-500">Engine</dt>
-            <dd className="text-sm">{data?.engine}</dd>
+            <dd className="text-sm">{data?.engine ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs text-gray-500">Environment</dt>
-            <dd className="text-sm">{data?.environment}</dd>
+            <dd className="text-sm">{data?.environment ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs text-gray-500">Status</dt>
-            <dd className="text-sm text-green-600">{data?.status}</dd>
+            <dd className="text-sm text-green-600">{data?.status ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-gray-500">SSL Mode</dt>
+            <dd className="text-sm">{data?.sslMode ?? "—"}</dd>
           </div>
         </dl>
       </div>
@@ -118,11 +122,11 @@ function DatabaseOverviewTab() {
         <dl className={`space-y-3 ${hidden}`}>
           <div>
             <dt className="text-xs text-gray-500">Host</dt>
-            <dd className="text-sm">{data?.host}</dd>
+            <dd className="text-sm">{data?.host ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs text-gray-500">Port</dt>
-            <dd className="text-sm">{data?.port}</dd>
+            <dd className="text-sm">{data?.port ?? "—"}</dd>
           </div>
         </dl>
       </div>
@@ -140,7 +144,7 @@ function DatabaseOverviewTab() {
           <div>
             <dt className="text-xs text-gray-500">Used</dt>
             <dd className="text-sm font-medium">
-              {convertBytesToGB(data?.totalstorageUsed)}
+              {convertBytesToGB(data?.totalstorageUsed) ?? "—"}
             </dd>
           </div>
         </dl>
