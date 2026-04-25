@@ -84,7 +84,7 @@
                 await loginUser(formData.email, formData.password);
 
                 setStatusMessage({ type: "success", message: "Login successful!" });
-                navigate("/dashboard");
+                navigate("/dashboard", { replace: true });
             } catch (err: any) {
                 const message =  err.response?.data?.message || "Login failed. Please try again.";
                 setError(message);

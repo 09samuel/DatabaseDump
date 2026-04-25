@@ -2,9 +2,11 @@ import { useState } from "react"
 import Logo from "../../assets/react.svg"
 import SidebarItem from "./SidebarItem"
 import { dashboardMenuItems, dashboardGeneralItems } from "./menuItems"
+import LogoutModal from "../Logout/LogoutModal"
 
 function Sidebar() {
   const [expanded, setExpanded] = useState(true)
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   return (
     <aside className="hidden md:block h-full">
@@ -51,12 +53,25 @@ function Sidebar() {
           {dashboardGeneralItems.map((item) => (
             <SidebarItem
               key={item.name}
-              item={item}
+              item={
+                item.name === "Logout"
+                  ? {
+                      ...item,
+                      onClick: () => setLogoutOpen(true)
+                    }
+                  : item
+              }
               expanded={expanded}
             />
           ))}
         </div>
       </nav>
+
+      <LogoutModal
+        open={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+      />
+
     </aside>
   )
 }

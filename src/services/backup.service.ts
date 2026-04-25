@@ -23,6 +23,14 @@ export async function initiateBackup(dbId: string, payload: {backupType: string,
   await api.post(`/backups/${dbId}`, payload)
 }
 
+export async function renameBackup(backupId: string, backupName: string): Promise<void> {
+  await api.patch(`/backups/${backupId}`, { backupName })
+}
+
+export async function deleteBackup(backupId: string): Promise<void> {
+  await api.delete(`/backups/${backupId}`)
+}
+
 export async function downloadBackup(backupId: string): Promise<{ url: string; checksum: string; algo: string }> {
   const res= await api.get(`backups/download/${backupId}`)
   return {

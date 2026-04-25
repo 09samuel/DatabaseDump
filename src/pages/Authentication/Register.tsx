@@ -89,7 +89,7 @@
                 await registerUser(formData.name.trim(), formData.email, formData.password);
 
                 setStatusMessage({ type: "success", message: "Registration successful!" });
-                navigate("/dashboard");
+                navigate("/dashboard", { replace: true });
             } catch (err: any) {
                 const message =  err.response?.data?.message || "Registration failed. Please try again.";
                 setError(message);

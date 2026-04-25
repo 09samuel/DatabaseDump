@@ -9,7 +9,7 @@ function StatusBar({ type, message, onClose }: StatusBarProps) {
     const isSuccess = type === "success"
 
     return (
-        <div className="fixed bottom-4 flex inset-x-0 justify-center z-70">
+        <div className="fixed bottom-4 flex inset-x-0 justify-center z-150">
         <div 
             className={`flex items-center gap-4 px-4 py-3 rounded-lg shadow-lg text-sm
             ${

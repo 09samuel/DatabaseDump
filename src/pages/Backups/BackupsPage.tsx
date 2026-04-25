@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Backup } from "../DatabaseDetails/types";
 import { getUserBackups } from "../../services/backup.service";
 import ErrorState from "../Databases/components/ErrorState";
@@ -97,8 +97,7 @@ function BackupsPage() {
     };
 
 
-    useEffect(() => {
-        const fetchBackups = async () => {
+    const fetchBackups = useCallback(async () => {
             try {
                 setLoading(true);
 
@@ -123,10 +122,11 @@ function BackupsPage() {
             } finally {
                 setLoading(false);
             }
-        };
+    }, [ filters.dbType, filters.environment, filters.status, filters.sortBy,, debouncedSearch, sortParams]);
 
+    useEffect(() => {
         fetchBackups();
-    }, [filters, debouncedSearch]);
+    }, [fetchBackups]);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -223,7 +223,7 @@ function BackupsPage() {
                 
                 {/* Data State */}
                 {(backups.length > 0) && backups.map((b) => (
-                    <BackupItem key={b.backupId} {...b} dbId={""}/>
+                    <BackupItem key={b.backupId} {...b} dbId={""} onBackupUpdated={fetchBackups} />
                 ))}
 
                 {!loading && hasMore && (

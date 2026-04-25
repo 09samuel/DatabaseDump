@@ -30,3 +30,8 @@ export async function userInfo() {
     const res = await api.get("/auth/user/info");
     return res.data;
 }
+
+export async function logout(): Promise<{message: string}> {
+    const res = await api.post("/auth/logout");
+    return res.data;
+}

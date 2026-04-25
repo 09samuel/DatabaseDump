@@ -8,12 +8,12 @@ import StatusBar from "../../../components/StatusBar/StatusBar";
 
 type BackupItemProps = Backup & {
   dbId: string;
+  onBackupUpdated?: () => void;
 };
 
 
-function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, storageTarget, status, createdAt, startedAt, error} : BackupItemProps){
+function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, storageTarget, status, createdAt, startedAt, error, onBackupUpdated} : BackupItemProps){
     const [restoring, setRestoring] = useState(false);
-    const [restoreError, setRestoreError] = useState<string | null>(null);
     const [downloading, setDownloading] = useState(false);
 
     const canRestore = status === "Success" && backupType === "FULL";
@@ -35,7 +35,6 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
 
         try {
             setRestoring(true);
-            setRestoreError(null);
 
             await requestRestore(dbId, backupId);
 
@@ -45,7 +44,6 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
             });
 
         } catch (err: any) {
-            setRestoreError(err.message ?? "Failed to start restore");
             setStatusMessage({type: "error", message: err?.response?.data?.message || err?.response?.data?.error || err?.message || "Failed to start restore"})
         } finally {
             setRestoring(false);
@@ -56,7 +54,7 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
         try {
             setDownloading(true);
 
-            const { url, checksum, algo } = await downloadBackup(backupId);
+            const { url, algo } = await downloadBackup(backupId);
 
             // Trigger browser download
             window.location.href = url;
@@ -101,7 +99,14 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                     </p>
                 </div>
 
-                <BackupActionsMenu status={status} />
+                {status === "Success" && (
+                    <BackupActionsMenu
+                        backupId={backupId}
+                        backupName={backupName}
+                        status={status}
+                        onActionSuccess={() => onBackupUpdated?.()}
+                    />
+                )}
             </div>
 
 
