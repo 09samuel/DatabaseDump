@@ -7,9 +7,10 @@ type DatabaseListProps = {
   onBackup: (db: Database) => void,
   onEdit: (db: Database) => void
   onDelete: (db: Database) => void
+  onManageCollaborators: (db: Database) => void
 }
 
-function DatabaseList( { databases, onBackup, onEdit, onDelete }: DatabaseListProps) {
+function DatabaseList( { databases, onBackup, onEdit, onDelete, onManageCollaborators }: DatabaseListProps) {
   return (
     <div>
       <table className="w-full border-separate border-spacing-y-2 table-fixed">
@@ -24,6 +25,7 @@ function DatabaseList( { databases, onBackup, onEdit, onDelete }: DatabaseListPr
               onBackup={onBackup}
               onEdit={onEdit}
               onDelete={onDelete}
+              onManageCollaborators={onManageCollaborators}
             />
           ))}
         </tbody>

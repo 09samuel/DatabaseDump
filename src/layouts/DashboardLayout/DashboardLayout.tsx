@@ -9,16 +9,20 @@ import BottomNav from '../../components/Sidebar/BottomNav'
 function DashboardLayout() {
   const location = useLocation()
   const [dbSearch, setDbSearch] = useState("")
+  const [backupSearch, setBackupSearch] = useState("")
 
-  const isDatabasesPage = location.pathname === "/databases"
+  const isDatabasesPage = location.pathname === "/dashboard/databases"
+  const isBackupsPage = location.pathname === "/dashboard/backups"
 
   const topbarProps: React.ComponentProps<typeof Topbar> =
-    isDatabasesPage
+    isDatabasesPage || isBackupsPage
       ? {
           showSearch: true,
-          searchPlaceholder: "Search databases...",
-          searchValue: dbSearch,
-          onSearchChange: setDbSearch,
+          searchPlaceholder: isBackupsPage
+            ? "Search backups..."
+            : "Search databases...",
+          searchValue: isBackupsPage ? backupSearch : dbSearch,
+          onSearchChange: isBackupsPage ? setBackupSearch : setDbSearch,
           rightActions: <UserActions />,
         }
       : {
@@ -37,7 +41,7 @@ function DashboardLayout() {
         <Topbar {...topbarProps} />
 
         <main className="flex flex-col flex-1 min-h-0">
-          <Outlet context={{ dbSearch }} />
+          <Outlet context={{ dbSearch, backupSearch }} />
         </main>
       </div>
 

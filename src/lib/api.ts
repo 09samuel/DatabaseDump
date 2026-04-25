@@ -1,27 +1,78 @@
-import axios from "axios"
+import axios from "axios";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
-})
+  withCredentials: true,
+});
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token")
+let isLoggingOut = false;
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+const handleLogout = async () => {
+  if (isLoggingOut) return;
+  isLoggingOut = true;
+
+  try {
+    await api.post("/auth/logout");
+  } catch (e) {
+    // ignore (token might already be invalid)
+  } finally {
+    window.location.href = "/login";
   }
+};
 
-  return config
-})
+let isRefreshing = false;
+let failedQueue: any[] = [];
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // redirect to login later
+const processQueue = (error: any) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve();
+  });
+  failedQueue = [];
+};
+
+api.interceptors.response.use( (response) => response, async (error) => {
+    const originalRequest = error.config;
+
+    //prevent infinite loop for refresh/logout
+    if (
+      originalRequest.url?.includes("/auth/refresh") ||
+      originalRequest.url?.includes("/auth/logout")
+    ) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: () => resolve(api(originalRequest)),
+            reject,
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        await api.post("/auth/refresh");
+
+        processQueue(null);
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+
+        // logout flow
+        await handleLogout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
   }
-)
+);

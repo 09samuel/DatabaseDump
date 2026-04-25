@@ -4,7 +4,6 @@ import SidebarItem from "./SidebarItem"
 import { dashboardMenuItems, dashboardGeneralItems } from "./menuItems"
 
 function Sidebar() {
-  const [activeItem, setActiveItem] = useState('Dashboard')
   const [expanded, setExpanded] = useState(true)
 
   return (
@@ -35,8 +34,6 @@ function Sidebar() {
               key={item.name}
               item={item}
               expanded={expanded}
-              activeItem={activeItem}
-              setActiveItem={setActiveItem}
             />
           ))}
         </div>
@@ -56,8 +53,6 @@ function Sidebar() {
               key={item.name}
               item={item}
               expanded={expanded}
-              activeItem={activeItem}
-              setActiveItem={setActiveItem}
             />
           ))}
         </div>

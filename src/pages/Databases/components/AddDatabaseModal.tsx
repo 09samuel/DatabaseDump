@@ -488,6 +488,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                             {dbEngine === "postgresql" && (
                                 <>
                                 <option value="disable">Disable</option>
+                                <option value="prefer">Prefer</option>
                                 <option value="require">Require</option>
                                 <option value="verify-ca">Verify CA</option>
                                 <option value="verify-full">Verify Full</option>

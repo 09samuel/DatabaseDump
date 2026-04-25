@@ -14,9 +14,11 @@ export type StorageTarget = "LOCAL_DESKTOP" | "LOCAL_TMP" | "S3"
 
 export type DatabaseEngine = "postgresql" | "mysql" | "mongodb"
 
-export type PostgresSSLMode = "disable" | "require" | "verify-ca" | "verify-full"
+export type PostgresSSLMode = "disable" | "prefer" | "require" | "verify-ca" | "verify-full"
 
 export type MySQLSSLMode = "disable" | "require"
+
+export type CollaboratorRoles = "OWNER" | "ADMIN" | "OPERATOR" | "VIEWER"
 
 export type SSLMode = PostgresSSLMode | MySQLSSLMode
 

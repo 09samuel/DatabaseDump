@@ -16,6 +16,7 @@ import DeleteDatabaseModal from "./components/DeleteDatabaseModal"
 import BackupDatabaseModal from "./components/BackupDatabaseModal"
 import { useOutletContext } from "react-router-dom"
 import DatabaseCard from "./components/DatabaseCard"
+import ManageCollaborators from "./components/ManageCollaboratorsModal"
 
 function DatabasesPage() {
   const [status, setStatus] = useState<PageState>("loading")
@@ -25,6 +26,7 @@ function DatabasesPage() {
   const [editingDb, setEditingDb] = useState<Database | null>(null)
   const [deletingDb, setDeletingDb] = useState<Database | null>(null)
   const [backupDb, setBackupDb] = useState<Database | null>(null)
+  const [managingCollaborators, setManagingCollaborators] = useState<Database | null>(null)
 
   const { dbSearch } =  useOutletContext<{ dbSearch: string }>()
 
@@ -126,6 +128,10 @@ function DatabasesPage() {
     setBackupDb(db)
   }
 
+  function handleManageCollaborators(db: Database) {
+    setManagingCollaborators(db)
+  }
+
 
   return (
     <div className="flex flex-col h-full min-h-0 border border-black rounded-lg bg-green-200 text-sm md:text-base overflow-hidden">
@@ -186,6 +192,7 @@ function DatabasesPage() {
               onBackup={handleBackup}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onManageCollaborators={handleManageCollaborators}
             />
           )}
         </div>
@@ -213,7 +220,7 @@ function DatabasesPage() {
         ) : (
           <div className="space-y-3 md:hidden overflow-y-auto pb-24">
             {filteredDatabases.map(db => (
-              <DatabaseCard key={db.id} db={db} onBackup={handleBackup} onEdit={handleEdit}  onDelete={handleDelete}/>
+              <DatabaseCard key={db.id} db={db} onBackup={handleBackup} onEdit={handleEdit}  onDelete={handleDelete} onManageCollborators={handleManageCollaborators}/>
             ))}
           </div>
         )}
@@ -241,6 +248,14 @@ function DatabasesPage() {
           />
         )}
 
+        {/* Manage Collbaorators Overlay */}
+        {managingCollaborators && (
+          <ManageCollaborators
+            dbId={managingCollaborators.id}
+            onClose={() => setManagingCollaborators(null)}
+          />
+        )}
+
         {/* Delete Database Overlay */}
         {deletingDb && (
           <DeleteDatabaseModal
@@ -259,7 +274,15 @@ function DatabasesPage() {
           <BackupDatabaseModal
             dbId={backupDb.id}
             dbName={backupDb.name}
-            engine={backupDb.engine}
+            engine={
+              backupDb.engine === "postgresql"
+                ? "PostgreSQL"
+                : backupDb.engine === "mysql"
+                ? "MySQL"
+                : backupDb.engine === "mongodb"
+                ? "MongoDB"
+                : (backupDb.engine as "PostgreSQL" | "MySQL" | "MongoDB")
+            }
             environment={backupDb.environment}
             onClose={() => setBackupDb(null)}
             onBackup={() => {

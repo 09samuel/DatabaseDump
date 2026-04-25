@@ -1,6 +1,9 @@
 import { Bell, UserCircle } from "lucide-react"
+import { useUserStore } from "../../store/userStore"
 
 function UserActions() {
+    const user = useUserStore((state) => state.user)
+
     return (
         <div className="flex items-center gap-4">
             <button aria-label="Notifications" className="bg-white rounded-full p-2">
@@ -14,11 +17,11 @@ function UserActions() {
 
                 <div className="md:flex md:flex-col hidden leading-tight">
                     <span className="text-sm font-medium text-black">
-                        John Doe
+                       {user?.name ?? "Guest"}
                     </span>
                     
                     <span className="text-xs text-gray-500">
-                        john.doe@email.com
+                        {user?.email ?? "Not logged in"}
                     </span>
                 </div>
             </div>

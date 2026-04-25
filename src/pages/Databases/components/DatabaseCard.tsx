@@ -1,4 +1,4 @@
-import { DatabaseBackup, Edit3, Trash2 } from "lucide-react";
+import { DatabaseBackup, Edit3, Trash2, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom"
 import type { Database } from "../types";
 import { useEffect, useRef, useState } from "react";
@@ -8,9 +8,10 @@ type DatabaseRowProps = {
   onBackup: (db: Database) => void;
   onEdit: (db: Database) => void;
   onDelete: (db: Database) => void;
+  onManageCollborators: (db: Database) => void;
 };
 
-function DatabaseCard({ db, onBackup, onEdit, onDelete }: DatabaseRowProps) {
+function DatabaseCard({ db, onBackup, onEdit, onDelete, onManageCollborators }: DatabaseRowProps) {
 
     const navigate = useNavigate()
 
@@ -30,7 +31,7 @@ function DatabaseCard({ db, onBackup, onEdit, onDelete }: DatabaseRowProps) {
 
     return (
         <div
-            onClick={() => navigate(`/databases/${db.id}`)}
+            onClick={() => navigate(`/dashboard/databases/${db.id}`)}
             className="bg-white rounded-lg p-4 shadow-sm border flex justify-between gap-4"
         >
             <div className="min-w-0">
@@ -40,6 +41,10 @@ function DatabaseCard({ db, onBackup, onEdit, onDelete }: DatabaseRowProps) {
             </div>
 
             <div className="flex items-start gap-2 shrink-0">
+                <button title="Manage Collaborators" onClick={(e) => {e.stopPropagation(); onManageCollborators(db)}} className="p-1 text-gray-700 hover:bg-gray-100">
+                    <UserPlus className="h-4 w-4" />
+                </button>
+
                 <button onClick={(e) => { e.stopPropagation(); onBackup(db); }} className="p-1 text-gray-700 hover:bg-gray-100" >
                     <DatabaseBackup className="h-4 w-4" />
                 </button>
