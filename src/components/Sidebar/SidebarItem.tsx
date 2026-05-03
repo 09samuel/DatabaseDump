@@ -14,7 +14,7 @@ type Props = {
 function SidebarItem({ item, expanded }: Props) {
   const IconComponent = item.icon;
 
-  const baseClasses = ` flex items-center p-2 mb-2 rounded cursor-pointer transition-all ${expanded ? "justify-start pl-3" : "justify-center"} hover:bg-green-100`;
+  const baseClasses = ` flex items-center p-2 mb-2 rounded cursor-pointer transition-all ${expanded ? "justify-start pl-3" : "justify-center"} hover:bg-blue-100 dark:hover:bg-neutral-800`;
 
   if (item.onClick) {
     return (
@@ -25,13 +25,13 @@ function SidebarItem({ item, expanded }: Props) {
         <IconComponent
           className={`w-5 h-5 shrink-0 ${
             expanded ? "me-3" : ""
-          } text-gray-400`}
+          } text-gray-400 dark:text-gray-500`}
         />
 
         <span
           className={`whitespace-nowrap transition-all duration-200
           ${expanded ? "opacity-100 w-auto" : "opacity-0 w-0 overflow-hidden"}
-          text-gray-500`}
+          text-gray-500 dark:text-gray-400`}
         >
           {item.name}
         </span>
@@ -44,7 +44,7 @@ function SidebarItem({ item, expanded }: Props) {
       to={item.path!}
       className={({ isActive }) =>
         `${baseClasses}
-        ${expanded && isActive ? "border-l-4 border-green-600" : ""}`
+        ${expanded && isActive ? "border-l-4 border-blue-600" : ""}`
       }
     >
       {({ isActive }) => (
@@ -52,13 +52,13 @@ function SidebarItem({ item, expanded }: Props) {
           <IconComponent
             className={`w-5 h-5 shrink-0 ${
               expanded ? "me-3" : ""
-            } ${isActive ? "text-green-600" : "text-gray-400"}`}
+            } ${isActive ? "text-blue-600" : "text-gray-400 dark:text-gray-500"}`}
           />
 
           <span
             className={`whitespace-nowrap transition-all duration-200
             ${expanded ? "opacity-100 w-auto" : "opacity-0 w-0 overflow-hidden"}
-            ${isActive ? "font-medium text-black" : "text-gray-500"}`}
+            ${isActive ? "font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400"}`}
           >
             {item.name}
           </span>

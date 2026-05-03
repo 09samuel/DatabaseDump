@@ -2,6 +2,7 @@ import { DatabaseBackup, UserPlus } from "lucide-react";
 import DatabaseActionsMenu from "./DatabaseActionsMenu";
 import type { Database } from "../types";
 import { useNavigate } from "react-router-dom"
+import { formatDateTime } from "../../../utils/formatDate";
 
 type DatabaseRowProps = {
   db: Database;
@@ -14,38 +15,23 @@ type DatabaseRowProps = {
 function DatabaseRow({ db, onBackup, onEdit, onDelete, onManageCollaborators }: DatabaseRowProps) {
   
   const navigate = useNavigate()
-
-  function formatDateTime(value?: string | null) {
-    if (!value) return "--";
-
-    const date = new Date(value);
-
-    return new Intl.DateTimeFormat(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
-  }
-
   
   return (
     <tr 
       onClick={() => navigate(`/dashboard/databases/${db.id}`)}
-      className="bg-[#f7f7f7] text-[#8e9c97] hover:bg-green-100 cursor-pointer"
+      className="bg-gray-100 dark:bg-neutral-900 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-neutral-800 cursor-pointer"
     >
-      <td className="px-6 py-2 rounded-l-lg border-b w-2/12 truncate">{db.name}</td>
-      <td className="border-b w-2/12 truncate">{db.engine}</td>
-      <td className="border-b w-2/12">{db.environment}</td>
-      <td className="border-b w-1/12 hidden md:table-cell">{db.status}</td>
-      <td className="border-b w-3/12 hidden md:table-cell">{formatDateTime(db.lastBackupAt)?? '--'}</td>
-      <td className="px-6 w-2/12 text-right rounded-r-lg border-b relative">
+      <td className="px-6 py-2 rounded-l-lg border-b border-gray-200 dark:border-neutral-800 w-2/12 truncate">{db.name}</td>
+      <td className="border-b border-gray-200 dark:border-neutral-800 w-2/12 truncate">{db.engine}</td>
+      <td className="border-b border-gray-200 dark:border-neutral-800 w-2/12">{db.environment}</td>
+      <td className="border-b border-gray-200 dark:border-neutral-800 w-1/12 hidden md:table-cell">{db.status}</td>
+      <td className="border-b border-gray-200 dark:border-neutral-800 w-3/12 hidden md:table-cell">{formatDateTime(db.lastBackupAt)?? '--'}</td>
+      <td className="px-6 w-2/12 text-right rounded-r-lg border-b border-gray-200 dark:border-neutral-800 relative">
         <div className="flex gap-2 justify-end">
-          <button title="Manage Collaborators" onClick={(e) => {e.stopPropagation(); onManageCollaborators(db)}} className="p-1 hover:text-green-600 cursor-pointer">
+          <button title="Manage Collaborators" onClick={(e) => {e.stopPropagation(); onManageCollaborators(db)}} className="p-1 hover:text-blue-600 text-gray-600 dark:text-gray-300 cursor-pointer">
             <UserPlus className="h-4 w-4 inline-block" />
           </button>
-          <button title="Backup Database" onClick={(e) => {e.stopPropagation(); onBackup(db)}} className="p-1 hover:text-green-600 cursor-pointer">
+          <button title="Backup Database" onClick={(e) => {e.stopPropagation(); onBackup(db)}} className="p-1 hover:text-blue-600 text-gray-600 dark:text-gray-300 cursor-pointer">
             <DatabaseBackup className="h-4 w-4 inline-block" />
           </button>
           <div className="inline-flex flex-col items-end">

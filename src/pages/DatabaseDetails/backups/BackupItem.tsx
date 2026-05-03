@@ -5,6 +5,7 @@ import { requestRestore } from "../../../services/restore.service";
 import { Download } from "lucide-react";
 import { downloadBackup } from "../../../services/backup.service";
 import StatusBar from "../../../components/StatusBar/StatusBar";
+import { formatDateTime } from "../../../utils/formatDate";
 
 type BackupItemProps = Backup & {
   dbId: string;
@@ -78,24 +79,24 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
     
     return(
         <>
-        <div className="rounded-xl border bg-white p-5 flex flex-col justify-between h-65">
+        <div className="rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 flex flex-col justify-between h-65">
             {/* Header */}
             {/* <div>
                 <h3 className="text-sm font-semibold text-gray-800 truncate">
                 {backupName ?? "Backup"}
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                    {new Date(createdAt).toLocaleString()}
+                    {formatDateTime(createdAt)}
                 </p>
             </div> */}
 
             <div className="flex items-start justify-between">
                 <div>
-                    <h3 className="text-sm font-semibold text-gray-800 truncate">
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
                         {backupName ?? "Backup"}
                     </h3>
-                    <p className="text-xs text-gray-500 mt-1">
-                        {new Date(createdAt).toLocaleString()}
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {formatDateTime(createdAt)}
                     </p>
                 </div>
 
@@ -129,7 +130,7 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                 </Row>
 
                 <Row label="Started">
-                    {startedAt ? new Date(startedAt).toLocaleTimeString() : "—"}
+                    {formatDateTime(startedAt)}
                 </Row>
             </dl>
 
@@ -140,7 +141,7 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                         <button
                             onClick={onRestore}
                             disabled={restoring}
-                            className="text-sm text-blue-600 hover:text-blue-900 disabled:text-gray-400 disabled:pointer-events-none"
+                            className="text-sm text-blue-600 hover:text-blue-900 disabled:text-gray-400 dark:disabled:text-gray-500 disabled:pointer-events-none"
                         >
                             {restoring ? "Restoring…" : "Restore"}
                         </button>
@@ -151,7 +152,7 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                             onClick={onDownload}
                             title="Download backup file"
                             disabled={downloading || restoring}
-                            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 disabled:text-gray-400 disabled:pointer-events-none"
+                            className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 disabled:text-gray-400 dark:disabled:text-gray-500 disabled:pointer-events-none"
                         >
                             <Download size={14} />
                             {downloading ? "Downloading…" : "Download"}
@@ -169,7 +170,7 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                 )}
 
                 {(status === "Queued" || status === "Running") && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-400 dark:text-gray-500">
                     In progress…
                     </span>
                 )}
@@ -197,8 +198,8 @@ function convertBytesToGB(bytes?: number | null): string {
 function Row({label, children}: {label: string; children: React.ReactNode;}) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="text-gray-500">{label}</dt>
-      <dd className="font-medium text-gray-800 truncate text-right">
+            <dt className="text-gray-500 dark:text-gray-400">{label}</dt>
+            <dd className="font-medium text-gray-800 dark:text-gray-100 truncate text-right">
         {children}
       </dd>
     </div>
@@ -210,16 +211,16 @@ function StatusBadge({ status }: { status: Backup["status"] }) {
 
   switch (status) {
     case "Success":
-      className = "text-green-600";
+            className = "text-blue-600 dark:text-blue-400";
       break;
     case "Failed":
-      className = "text-red-600";
+            className = "text-red-600 dark:text-red-400";
       break;
     case "Running":
-      className = "text-blue-600";
+            className = "text-blue-600 dark:text-blue-400";
       break;
     case "Queued":
-      className = "text-gray-500";
+            className = "text-gray-500 dark:text-gray-400";
       break;
   }
 

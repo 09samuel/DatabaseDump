@@ -17,14 +17,14 @@ function BottomNav() {
 
   return (
     <>
-        <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white md:hidden">
-            <ul className="flex justify-around items-center h-14 rounded-xl shadow border">
+        <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white dark:bg-neutral-900 md:hidden">
+            <ul className="flex justify-around items-center h-14 rounded-xl shadow border border-gray-200 dark:border-neutral-800">
                 {items.map((item) => (
                     <li key={item.name}>
                         {item.name === "Logout" ? (
                         <button
                             onClick={() => setLogoutOpen(true)}
-                            className="flex flex-col items-center text-xs text-gray-400"
+                            className="flex flex-col items-center text-xs text-gray-400 dark:text-gray-500"
                         >
                             <item.icon className="h-5 w-5" />
                         </button>
@@ -33,7 +33,7 @@ function BottomNav() {
                             to={item.path}
                             className={({ isActive }) =>
                             `flex flex-col items-center text-xs ${
-                                isActive ? "text-green-600" : "text-gray-400"
+                                isActive ? "text-blue-600" : "text-gray-400 dark:text-gray-500"
                             }`
                             }
                         >

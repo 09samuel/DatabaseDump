@@ -144,7 +144,7 @@ function BackupsPage() {
                         value={filters.dbType}
                         onChange={handleFilterChange}
                         name="dbType"
-                        className="flex-1 md:w-32 border rounded-lg py-2 px-2 text-sm bg-white"
+                        className="flex-1 md:w-32 border border-gray-200 dark:border-neutral-800 rounded-lg py-2 px-2 text-sm bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100"
                     >
                         <option value="">All DBs</option>
                         <option value="postgresql">Postgres</option>
@@ -156,7 +156,7 @@ function BackupsPage() {
                         value={filters.environment}
                         onChange={handleFilterChange}
                         name="environment"
-                        className="flex-1 md:w-32 border rounded-lg py-2 px-2 text-sm bg-white"
+                        className="flex-1 md:w-32 border border-gray-200 dark:border-neutral-800 rounded-lg py-2 px-2 text-sm bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100"
                     >
                         <option value="">All Envs</option>
                         <option value="production">Prod</option>
@@ -168,7 +168,7 @@ function BackupsPage() {
                         value={filters.status}
                         onChange={handleFilterChange}
                         name="status"
-                        className="flex-1 md:w-32 border rounded-lg py-2 px-2 text-sm bg-white"
+                        className="flex-1 md:w-32 border border-gray-200 dark:border-neutral-800 rounded-lg py-2 px-2 text-sm bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100"
                     >
                         <option value="">Status</option>
                         <option value="queued">Queued</option>
@@ -185,7 +185,7 @@ function BackupsPage() {
                         value={filters.sortBy}
                         onChange={handleFilterChange}
                         name="sortBy"
-                        className="w-full md:w-auto border rounded-lg px-3 py-2 text-sm bg-gray-50 font-medium"
+                        className="w-full md:w-auto border border-gray-200 dark:border-neutral-800 rounded-lg px-3 py-2 text-sm bg-gray-50 dark:bg-neutral-900 font-medium text-gray-900 dark:text-gray-100"
                     >
                         <option value="latest">Sort: Latest</option>
                         <option value="oldest">Sort: Oldest</option>
@@ -195,11 +195,11 @@ function BackupsPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:pr-3 mb-4 pb-24 md:pb-0 overflow-y-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:pr-3 pb-24 md:pb-0 overflow-y-auto">
                 {/* INITIAL LOADING STATE*/}
                 {loading && backups.length === 0 && (
                     Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className="h-64 rounded-xl bg-gray-100 animate-pulse" />
+                        <div key={i} className="h-64 rounded-xl bg-gray-100 dark:bg-neutral-800 animate-pulse" />
                     ))
                 )}
 
@@ -226,19 +226,19 @@ function BackupsPage() {
                     <BackupItem key={b.backupId} {...b} dbId={""} onBackupUpdated={fetchBackups} />
                 ))}
 
-                {!loading && hasMore && (
+                {!loading && !error && backups.length > 0 && hasMore && (
                     /* Full-width container to ground the button */
-                    <div className="col-span-full mt-4 flex flex-col items-center gap-3 py-8 border-t border-gray-100">
+                    <div className="col-span-full mt-4 flex flex-col items-center gap-3 py-8 border-t border-gray-100 dark:border-neutral-800">
                         
                         {/* Optional: Results Counter (Very common in SaaS) */}
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">
                             Showing {backups.length} backups
                         </p>
 
                         <button
                             onClick={loadMore}
                             disabled={loadingMore}
-                            className="group relative flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-400 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+                            className="group relative flex items-center gap-2 px-6 py-2.5 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-800 hover:border-gray-400 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
                         >
                             {loadingMore ? (
                                 <>
@@ -248,7 +248,7 @@ function BackupsPage() {
                             ) : (
                                 <>
                                     <span>Load more</span>
-                                    <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                                    <ChevronDown className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
                                 </>
                             )}
                         </button>

@@ -10,19 +10,31 @@ function DashboardLayout() {
   const location = useLocation()
   const [dbSearch, setDbSearch] = useState("")
   const [backupSearch, setBackupSearch] = useState("")
+  const [auditSearch, setAuditSearch] = useState("")
 
   const isDatabasesPage = location.pathname === "/dashboard/databases"
   const isBackupsPage = location.pathname === "/dashboard/backups"
+  const isAuditLogsPage = location.pathname === "/dashboard/audit-logs"
 
   const topbarProps: React.ComponentProps<typeof Topbar> =
-    isDatabasesPage || isBackupsPage
+    isDatabasesPage || isBackupsPage || isAuditLogsPage
       ? {
           showSearch: true,
           searchPlaceholder: isBackupsPage
             ? "Search backups..."
-            : "Search databases...",
-          searchValue: isBackupsPage ? backupSearch : dbSearch,
-          onSearchChange: isBackupsPage ? setBackupSearch : setDbSearch,
+            : isAuditLogsPage
+              ? "Search audit logs..."
+              : "Search databases...",
+          searchValue: isBackupsPage
+            ? backupSearch
+            : isAuditLogsPage
+              ? auditSearch
+              : dbSearch,
+          onSearchChange: isBackupsPage
+            ? setBackupSearch
+            : isAuditLogsPage
+              ? setAuditSearch
+              : setDbSearch,
           rightActions: <UserActions />,
         }
       : {
@@ -31,7 +43,7 @@ function DashboardLayout() {
         }
 
   return (
-  <div className="flex h-screen w-full p-4 gap-4">
+  <div className="flex h-screen w-full p-4 gap-4 bg-white text-gray-900 dark:bg-neutral-950 dark:text-gray-100">
       
       <aside className="hidden md:flex shrink-0">
         <Sidebar />
@@ -41,7 +53,7 @@ function DashboardLayout() {
         <Topbar {...topbarProps} />
 
         <main className="flex flex-col flex-1 min-h-0">
-          <Outlet context={{ dbSearch, backupSearch }} />
+          <Outlet context={{ dbSearch, backupSearch, auditSearch }} />
         </main>
       </div>
 

@@ -98,7 +98,7 @@ function LimitsCard({ settings, onUpdate }: LimitsCardProps) {
         }}
         onSave={handleSave}
       >
-        <label className="block text-sm mb-1">
+        <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
           Backup timeout (minutes)
         </label>
         <input
@@ -109,7 +109,7 @@ function LimitsCard({ settings, onUpdate }: LimitsCardProps) {
             setTime(e.target.value); 
             clearError()
           }}
-          className="w-full border rounded px-3 py-2 disabled:opacity-100"
+          className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
         />
       </SettingsCard>
 

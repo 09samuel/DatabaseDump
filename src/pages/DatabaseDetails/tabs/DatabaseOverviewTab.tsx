@@ -5,7 +5,7 @@ import type { DatabaseOverview } from "../../Databases/types";
 import ErrorState from "../../Databases/components/ErrorState";
 import EmptyState from "../../Databases/components/EmptyState";
 import { Library } from "lucide-react";
-
+import { formatDateTime } from "../../../utils/formatDate";
 
 
 function DatabaseOverviewTab() {
@@ -15,7 +15,7 @@ function DatabaseOverviewTab() {
   
   const { id } = useParams<{ id: string }>();
 
-  const skeleton = loading ? "animate-pulse bg-gray-200" : "bg-white";
+  const skeleton = loading ? "animate-pulse bg-gray-200 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900";
   const hidden = loading ? "opacity-0" : "";
 
   useEffect( ()=>{
@@ -61,53 +61,51 @@ function DatabaseOverviewTab() {
 
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2 mb-4 pb-24 md:pb-0">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 me-2 mb-4 pb-24 md:pb-0 text-gray-900 dark:text-gray-100">
       {/* BIG: Database Overview */}
-      <div className={`md:col-span-2 md:row-span-2 rounded-xl border min-h-65 p-6 ${skeleton}`}>
-        <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>
+      <div className={`md:col-span-2 md:row-span-2 rounded-xl border border-gray-200 dark:border-neutral-800 min-h-65 p-6 ${skeleton}`}>
+        <h3 className={`text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 ${hidden}`}>
           Database
         </h3>
         <dl className={`space-y-3 ${hidden}`}>
           <div>
-            <dt className="text-xs text-gray-500">Name</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Name</dt>
             <dd className="text-sm font-medium">{data?.name ?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Engine</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Engine</dt>
             <dd className="text-sm">{data?.engine ?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Environment</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Environment</dt>
             <dd className="text-sm">{data?.environment ?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Status</dt>
-            <dd className="text-sm text-green-600">{data?.status ?? "—"}</dd>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Status</dt>
+            <dd className="text-sm text-blue-600">{data?.status ?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">SSL Mode</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">SSL Mode</dt>
             <dd className="text-sm">{data?.sslMode ?? "—"}</dd>
           </div>
         </dl>
       </div>
 
       {/* TALL: Backup */}
-      <div className={`md:row-span-2 rounded-xl border min-h-65 p-6 ${skeleton}`}>
-        <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>
+      <div className={`md:row-span-2 rounded-xl border border-gray-200 dark:border-neutral-800 min-h-65 p-6 ${skeleton}`}>
+        <h3 className={`text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 ${hidden}`}>
           Backup
         </h3>
         <dl className={`space-y-3 ${hidden}`}>
           <div>
-            <dt className="text-xs text-gray-500">Last Backup</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Last Backup</dt>
             <dd className="text-sm">
-              {data?.lastBackupAt
-                ? new Date(data?.lastBackupAt).toLocaleString()
-                : "—"}
+              {formatDateTime(data?.lastBackupAt)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Status</dt>
-            <dd className="text-sm text-green-600">
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Status</dt>
+            <dd className="text-sm text-blue-600">
               {data?.lastBackupStatus ?? "—"}
             </dd>
           </div>
@@ -115,34 +113,34 @@ function DatabaseOverviewTab() {
       </div>
 
       {/* SMALL: Connection */}
-      <div className={`rounded-xl md:row-span-1 border p-6 min-h-40 ${skeleton}`}>
-        <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>
+      <div className={`rounded-xl md:row-span-1 border border-gray-200 dark:border-neutral-800 p-6 min-h-40 ${skeleton}`}>
+        <h3 className={`text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 ${hidden}`}>
           Connection
         </h3>
         <dl className={`space-y-3 ${hidden}`}>
           <div>
-            <dt className="text-xs text-gray-500">Host</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Host</dt>
             <dd className="text-sm">{data?.host ?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Port</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Port</dt>
             <dd className="text-sm">{data?.port ?? "—"}</dd>
           </div>
         </dl>
       </div>
 
       {/* WIDE: Storage */}
-      <div className={`md:col-span-2 md:row-span-1 rounded-xl min-h-40 border p-6 ${skeleton}`}>
-        <h3 className={`text-sm font-semibold text-gray-700 mb-4 ${hidden}`}>
+      <div className={`md:col-span-2 md:row-span-1 rounded-xl min-h-40 border border-gray-200 dark:border-neutral-800 p-6 ${skeleton}`}>
+        <h3 className={`text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 ${hidden}`}>
           Storage
         </h3>
         <dl className={`space-y-3 ${hidden}`}>
           <div>
-            <dt className="text-xs text-gray-500">Target</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Target</dt>
             <dd className="text-sm">{data?.lastStorageTarget?? "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-gray-500">Used</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400">Used</dt>
             <dd className="text-sm font-medium">
               {convertBytesToGB(data?.totalstorageUsed) ?? "—"}
             </dd>

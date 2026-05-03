@@ -7,11 +7,11 @@ type ErrorStateProps = {
 function ErrorState( { errorMessage = "Failed to load databases. Please try again." }: ErrorStateProps ) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-8">
-        <AlertCircle className="w-12 h-12 text-green-600 mb-6" />
-        <span className="text-xl font-semibold text-gray-900 mb-2">
+        <AlertCircle className="w-12 h-12 text-blue-600 mb-6" />
+        <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Something went wrong
         </span>
-        <span className="text-gray-500 max-w-md mb-6">
+        <span className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
             {errorMessage}
         </span>
 

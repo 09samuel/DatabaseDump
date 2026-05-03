@@ -80,15 +80,15 @@ function BackupActionsMenu({ backupId, backupName, status, onActionSuccess }: Ba
         }
     }
 
-    const baseItem = "w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 text-gray-700";
-    const dangerItem = "w-full text-left px-3 py-1.5 text-xs text-red-600 hover:bg-red-50";
+    const baseItem = "w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-neutral-800 text-gray-700 dark:text-gray-200";
+    const dangerItem = "w-full text-left px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20";
 
     return (
         <>
             <div className="relative" ref={ref}>
                 <button
                 onClick={() => setOpen(!open)}
-                className="p-1 rounded hover:bg-gray-100"
+                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800"
                 aria-label="Backup actions"
                 title="Backup actions"
                 >
@@ -96,7 +96,7 @@ function BackupActionsMenu({ backupId, backupName, status, onActionSuccess }: Ba
                 </button>
 
                 {open && (
-                    <div className="absolute right-0 w-28 rounded-md border bg-white shadow-md z-10">
+                    <div className="absolute right-0 w-28 rounded-md border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-md z-10">
                         <ul className="py-1">
                             <li>
                                 <button

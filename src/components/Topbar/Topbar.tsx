@@ -19,19 +19,19 @@ type TopbarProps =
 
 function Topbar(props: TopbarProps) {
   return (
-    <div className="w-full bg-blue-200 border border-black rounded-lg">
+    <div className="w-full bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg">
       {/* inner spacing container */}
       <div className="flex items-center px-4 py-3">
         <div className="flex-1">
           {props.showSearch && (
-            <div className="inline-flex items-center gap-2 bg-white rounded-full px-3 py-2 w-40 sm:w-50">
-              <Search className="w-5 h-5 text-black" />
+            <div className="inline-flex items-center gap-2 bg-white dark:bg-neutral-800 rounded-full px-3 py-2 w-40 sm:w-50">
+              <Search className="w-5 h-5 text-gray-900 dark:text-gray-100" />
               <input
                 type="text"
                 placeholder={props.searchPlaceholder}
                 value={props.searchValue}
                 onChange={(e) => props.onSearchChange(e.target.value)}
-                className="bg-transparent outline-none text-sm min-w-0 w-full"
+                className="bg-transparent outline-none text-sm min-w-0 w-full text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
               />
             </div>
           )}

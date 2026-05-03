@@ -32,24 +32,24 @@ function DatabaseCard({ db, onBackup, onEdit, onDelete, onManageCollborators }: 
     return (
         <div
             onClick={() => navigate(`/dashboard/databases/${db.id}`)}
-            className="bg-white rounded-lg p-4 shadow-sm border flex justify-between gap-4"
+            className="bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-neutral-800 flex justify-between gap-4"
         >
             <div className="min-w-0">
-                <p className="font-medium truncate">{db.name}</p>
-                <p className="text-sm text-gray-500">{db.engine}</p>
-                <p className="text-xs text-gray-400">{db.environment}</p>
+                <p className="font-medium truncate text-gray-900 dark:text-gray-100">{db.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{db.engine}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{db.environment}</p>
             </div>
 
             <div className="flex items-start gap-2 shrink-0">
-                <button title="Manage Collaborators" onClick={(e) => {e.stopPropagation(); onManageCollborators(db)}} className="p-1 text-gray-700 hover:bg-gray-100">
+                <button title="Manage Collaborators" onClick={(e) => {e.stopPropagation(); onManageCollborators(db)}} className="p-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
                     <UserPlus className="h-4 w-4" />
                 </button>
 
-                <button onClick={(e) => { e.stopPropagation(); onBackup(db); }} className="p-1 text-gray-700 hover:bg-gray-100" >
+                <button onClick={(e) => { e.stopPropagation(); onBackup(db); }} className="p-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800" >
                     <DatabaseBackup className="h-4 w-4" />
                 </button>
 
-                <button onClick={(e) => { e.stopPropagation(); setIsOpen(false); onEdit(db); }} className="p-1 text-gray-700 hover:bg-gray-100" >
+                <button onClick={(e) => { e.stopPropagation(); setIsOpen(false); onEdit(db); }} className="p-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800" >
                     <Edit3 className="h-4 w-4" />
                 </button>
 

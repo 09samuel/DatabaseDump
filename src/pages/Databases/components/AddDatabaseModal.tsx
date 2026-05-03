@@ -410,10 +410,10 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                 }
             }}
         >
-            <form  onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-md max-h-[90vh] bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4">
+            <form  onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-md max-h-[90vh] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg shadow-lg p-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-1" >
-                    <span className="text-2xl font-semibold">Add Database</span>
-                    <span className="text-[#8e9c97]">
+                    <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Add Database</span>
+                    <span className="text-gray-500 dark:text-gray-400">
                         Fill in the details to add a new database connection
                     </span>
                 </div>
@@ -428,7 +428,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         disabled={isLocked}
                         onChange={(e) => setDatabaseName(e.target.value)} 
                         placeholder="Database Name"
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
 
                     <input
@@ -437,7 +437,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         disabled={isLocked}
                         onChange={(e) => setHost(e.target.value)} 
                         placeholder="Host"
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
 
                     <input
@@ -449,13 +449,13 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                             setPort(v === "" ? null : Number(v));
                         }}
                         placeholder={dbEngine === "mongodb" ? "Not required for MongoDB Atlas" : "Port"}
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100"
+                                className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800"
                      />
 
 
                     {/* Database Engine */}
                     <div className="flex flex-col gap-1">
-                    <label htmlFor="dbEngine" className="font-medium">
+                    <label htmlFor="dbEngine" className="font-medium text-gray-700 dark:text-gray-300">
                         Database engine
                     </label>
                     <select
@@ -463,7 +463,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         value={dbEngine ?? ""}
                         disabled={isLocked}
                         onChange={(e) => setDbEngine(e.target.value === "" ? null : (e.target.value as DatabaseEngine)) }
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     >
                         <option value="">Select engine</option>
                         <option value="postgresql">PostgreSQL</option>
@@ -475,7 +475,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                     {/* SSL Mode */}
                     {(dbEngine === "postgresql" || dbEngine === "mysql") && (
                         <div className="flex flex-col gap-1">
-                            <label htmlFor="sslMode" className="font-medium">
+                            <label htmlFor="sslMode" className="font-medium text-gray-700 dark:text-gray-300">
                             SSL Mode
                             </label>
                             <select
@@ -483,7 +483,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                                 value={sslMode ?? "disable"}
                                 disabled={isLocked}
                                 onChange={(e) => setSslMode(e.target.value === "" ? null : (e.target.value as SSLMode)) }
-                                className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                             >
                             {dbEngine === "postgresql" && (
                                 <>
@@ -503,7 +503,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                             )}
                             </select>
 
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                             Hosted databases usually require SSL.
                             </span>
                         </div>
@@ -512,7 +512,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
                     {/* Environment */}
                     <div className="flex flex-col gap-1">
-                    <label htmlFor="environment" className="font-medium">
+                    <label htmlFor="environment" className="font-medium text-gray-700 dark:text-gray-300">
                         Environment
                     </label>
                     <select
@@ -520,7 +520,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         value={environment}
                         disabled={isLocked}
                         onChange={(e) => setEnvironment(e.target.value)} 
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     >
                         <option value="">Select environment</option>
                         <option value="development">Development</option>
@@ -535,7 +535,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         disabled={isLocked}
                         onChange={(e) => setUsername(e.target.value)} 
                         placeholder="Username"
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
 
                     <input
@@ -544,7 +544,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         disabled={isLocked}
                         onChange={(e) => setPassword(e.target.value)} 
                         placeholder="Password"
-                        className="p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
                 </div>
 
@@ -554,7 +554,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         type="button" 
                         onClick={handleVerify} 
                         disabled={verifyState === "verifying" || backendVerifyState === "VERIFYING"}
-                        className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                         {verifyState === "verifying" ? "Verifying..." : "Verify Connection"}
                     </button>
@@ -562,14 +562,14 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                     <button
                         type="submit"
                         disabled={!isVerified || loading || isLocked}
-                        className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                         {backendVerifyState === "VERIFYING" ? "Verifying...": loading ? "Adding..." : "Add Database"}
                     </button>
                 </div>
 
                 {/* Helper text */}
-                <div className="flex items-start gap-2 text-sm text-gray-500 max-w-md">
+                <div className="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400 max-w-md">
                     <Info className="w-4 h-4 shrink-0 mt-0.5" />
                     <span className="min-w-0">
                         For security best practices, create a dedicated database user with

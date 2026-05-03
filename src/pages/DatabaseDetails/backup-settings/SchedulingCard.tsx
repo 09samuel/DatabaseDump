@@ -113,7 +113,7 @@
             }}
             onSave={handleSave}
           >
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
               <input
                 type="checkbox"
                 disabled={!editing || isLocalStorage}
@@ -127,7 +127,7 @@
             </label>
 
             <div>
-              <label className="block text-sm mb-1">Cron expression <span className="font-bold">(UTC)</span></label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">Cron expression <span className="font-bold">(UTC)</span></label>
               <input
                 type="text"
                 disabled={!editing || !enabled || isLocalStorage}
@@ -136,17 +136,17 @@
                   setCron(e.target.value);
                   clearError();
                 }}
-                className={`w-full border rounded px-3 py-2 ${
+                className={`w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 ${
                   editing && enabled && !isLocalStorage ? "opacity-100" : "opacity-60 cursor-not-allowed"
                 }`}
               />
-              <p className="text-xs mt-1 text-gray-500">
+              <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
                 Example: 0 2 * * * 
               </p>
             </div>
 
             {isLocalStorage && (
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 Scheduled backups are not available when using local storage.
               </p>
             )}

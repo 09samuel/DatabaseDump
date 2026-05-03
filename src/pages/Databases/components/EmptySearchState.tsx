@@ -4,7 +4,7 @@ type EmptySearchStateProps = {
 
 function EmptySearchState({ query }: EmptySearchStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-16 text-gray-600">
+    <div className="flex flex-col items-center justify-center text-center py-16 text-gray-600 dark:text-gray-400">
       <p className="text-lg font-medium">
         No results found
       </p>

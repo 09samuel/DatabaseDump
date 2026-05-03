@@ -62,10 +62,10 @@ function DatabaseBackupsTab() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 me-2 mb-4 pb-24 md:pb-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 me-2 mb-4 pb-24 md:pb-0 text-gray-900 dark:text-gray-100">
       {loading
         ? Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-65 rounded-xl border bg-gray-200 animate-pulse" />
+            <div key={i} className="h-65 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-200 dark:bg-neutral-800 animate-pulse" />
           ))
         : backups?.map((b) => (
             <BackupItem key={b.backupId} {...b} dbId={id!} onBackupUpdated={fetchBackups} />

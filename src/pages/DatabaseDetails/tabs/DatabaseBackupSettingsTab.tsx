@@ -84,14 +84,14 @@ export default function DatabaseBackupSettingsTab() {
   }
 
   return (
-    <div className="space-y-6 me-2 mb-4 pb-24 md:pb-0 text-sm md:text-base">
+    <div className="space-y-6 me-2 mb-4 pb-24 md:pb-0 text-sm md:text-base text-gray-900 dark:text-gray-100">
       {loading ? (
         <>
-          <div className="min-h-80.25 rounded-xl border bg-gray-200 animate-pulse" />
-          <div className="min-h-78.5 rounded-xl border bg-gray-200 animate-pulse" />
-          <div className="min-h-55.5 rounded-xl border bg-gray-100 animate-pulse" />
-          <div className="min-h-53 rounded-xl border bg-gray-100 animate-pulse" />
-          <div className="min-h-38 rounded-xl border bg-gray-100 animate-pulse" />
+          <div className="min-h-80.25 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-200 dark:bg-neutral-800 animate-pulse" />
+          <div className="min-h-78.5 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-200 dark:bg-neutral-800 animate-pulse" />
+          <div className="min-h-55.5 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-800 animate-pulse" />
+          <div className="min-h-53 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-800 animate-pulse" />
+          <div className="min-h-38 rounded-xl border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-800 animate-pulse" />
         </>
       ) : (
         settings && (

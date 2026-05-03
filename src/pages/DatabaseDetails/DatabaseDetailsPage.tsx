@@ -1,4 +1,4 @@
-import { DatabaseBackup, Library, Settings } from "lucide-react";
+import { DatabaseBackup, Library, Settings, ClipboardList } from "lucide-react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import type { DatabaseBasicDetails } from "../Databases/types";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ function DatabaseDetailsPage() {
     const [error, setError] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error";  message: string;} | null>(null);
         
-    const skeleton = "animate-pulse bg-gray-200 rounded";
+    const skeleton = "animate-pulse bg-gray-200 dark:bg-neutral-800 rounded";
 
     const { id } = useParams<{ id: string }>();
 
@@ -54,7 +54,7 @@ function DatabaseDetailsPage() {
 
     return (
         <>
-            <div className="flex flex-col h-full min-h-0 px-6 pt-6 border border-black rounded-lg bg-[#f7f7f7]">
+            <div className="flex flex-col h-full min-h-0 px-6 pt-6 border border-gray-200 dark:border-neutral-800 rounded-lg bg-gray-100 dark:bg-neutral-900">
                 {/* Header */}
                 <div className="h-7 flex items-center">
                     {loading ? (
@@ -71,7 +71,7 @@ function DatabaseDetailsPage() {
                 </div>
 
 
-                <div className="flex gap-2 text-gray-400 items-center text-sm md:text-base">
+                <div className="flex gap-2 text-gray-400 dark:text-gray-500 items-center text-sm md:text-base">
                     {loading ? (
                         <>
                             <div className={`${skeleton} h-4 w-28`} />
@@ -102,7 +102,7 @@ function DatabaseDetailsPage() {
                 
 
                 {/* Tabs */}
-                <div className="border-b">
+                <div className="border-b border-gray-200 dark:border-neutral-800">
                     <ul className="flex justify-center md:justify-start gap-6 md:gap-8 mt-6">
                         <li>
                             <NavLink
@@ -112,8 +112,8 @@ function DatabaseDetailsPage() {
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
-                                        ? "border-black font-medium"
-                                        : "border-transparent text-gray-500"
+                                        ? "border-gray-900 text-gray-900 dark:border-gray-100 dark:text-gray-100 font-medium"
+                                        : "border-transparent text-gray-500 dark:text-gray-400"
                                     }`
                                 }
                             >
@@ -129,8 +129,8 @@ function DatabaseDetailsPage() {
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
-                                        ? "border-black font-medium"
-                                        : "border-transparent text-gray-500"
+                                        ? "border-gray-900 text-gray-900 dark:border-gray-100 dark:text-gray-100 font-medium"
+                                        : "border-transparent text-gray-500 dark:text-gray-400"
                                     }`
                                 }
                             >
@@ -146,13 +146,30 @@ function DatabaseDetailsPage() {
                                 className={({ isActive }) =>
                                     `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
                                     isActive
-                                        ? "border-black font-medium"
-                                        : "border-transparent text-gray-500"
+                                        ? "border-gray-900 text-gray-900 dark:border-gray-100 dark:text-gray-100 font-medium"
+                                        : "border-transparent text-gray-500 dark:text-gray-400"
                                     }`
                                 }
                             >
                                 <Settings className="h-4 w-4 hidden md:inline" />
                                 Backup Settings
+                            </NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink
+                                to="audit-logs"
+                                replace={true}
+                                className={({ isActive }) =>
+                                    `inline-flex items-center gap-2 pb-2 border-b-2 text-sm md:text-base ${
+                                    isActive
+                                        ? "border-gray-900 text-gray-900 dark:border-gray-100 dark:text-gray-100 font-medium"
+                                        : "border-transparent text-gray-500 dark:text-gray-400"
+                                    }`
+                                }
+                            >
+                                <ClipboardList className="h-4 w-4 hidden md:inline" />
+                                Audit Logs
                             </NavLink>
                         </li>
                     </ul>

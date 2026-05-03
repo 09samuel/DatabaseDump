@@ -125,7 +125,7 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
         onSave = {handleSave}
       >
 
-        <label className="flex items-center gap-2 mb-4">
+        <label className="flex items-center gap-2 mb-4 text-gray-700 dark:text-gray-300">
           <input
             type="checkbox"
             disabled={!editing || !canEnableRetention}
@@ -151,7 +151,7 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
           </p>
         )}
 
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
           <input
             type="radio"
             disabled={!editing || !enabled}
@@ -174,10 +174,10 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
             setValue(v === "" ? null : Number(v));
             clearError();
           }}
-          className="w-full border rounded px-3 py-2 disabled:opacity-60"
+          className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-60"
         />
 
-        <label className="flex items-center gap-2 mt-4">
+        <label className="flex items-center gap-2 mt-4 text-gray-700 dark:text-gray-300">
           <input
             type="radio"
             disabled={!editing || !enabled}
@@ -199,10 +199,10 @@ function RetentionPolicyCard({ settings, onUpdate }: RetentionPolicyCardProps) {
             clearError()
           }}
           
-          className="w-full border rounded px-3 py-2 disabled:opacity-60"
+          className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-60"
         />
 
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           Retention rules apply only to backups that have not been restored. Restored backups are never deleted automatically.
         </p>
       </SettingsCard>

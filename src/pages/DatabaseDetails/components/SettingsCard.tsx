@@ -11,9 +11,9 @@ type SettingsCardProps = {
 
 function SettingsCard({ title, editing, disableEdit, onEdit, onCancel, onSave, children,}: SettingsCardProps) {
   return (
-    <div className="rounded-xl border bg-white p-6">
+    <div className="rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
         <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{title}</h3>
             
             {!editing ? (
                 <button
@@ -31,12 +31,12 @@ function SettingsCard({ title, editing, disableEdit, onEdit, onCancel, onSave, c
                 </button>
             ) : (
                 <div className="flex gap-4">
-                    <button className="text-sm text-green-600 hover:underline" onClick={onSave}>
+                    <button className="text-sm text-blue-600 hover:underline" onClick={onSave}>
                     Save
                     </button>
                     <button
                     onClick={onCancel}
-                    className="text-sm text-gray-500 hover:underline"
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
                     >
                     Cancel
                     </button>

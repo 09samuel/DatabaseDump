@@ -29,7 +29,7 @@ function DatabaseActionsMenu({ onEdit, onDelete }: DatabaseActionsMenuProps) {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-1 hover:text-green-600 cursor-pointer"
+        className="p-1 hover:text-blue-600 text-gray-600 dark:text-gray-300 cursor-pointer"
       >
         <EllipsisVertical className="h-4 w-4 inline-block" />
       </button>
@@ -37,12 +37,12 @@ function DatabaseActionsMenu({ onEdit, onDelete }: DatabaseActionsMenuProps) {
       {isOpen && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className="absolute top-[50%] w-26 bg-white rounded-md border shadow-md z-10"
+          className="absolute top-[50%] w-26 bg-white dark:bg-neutral-900 rounded-md border border-gray-200 dark:border-neutral-800 shadow-md z-10"
         >
           <ul className="py-1 text-xs">
             <li>
               <button
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-gray-700 hover:bg-gray-100"
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800"
                 onClick={() => {
                   setIsOpen(false);
                   onEdit();
@@ -55,7 +55,7 @@ function DatabaseActionsMenu({ onEdit, onDelete }: DatabaseActionsMenuProps) {
 
             <li>
               <button
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-red-600 hover:bg-red-50"
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                 onClick={() => {
                   setIsOpen(false);
                   onDelete();

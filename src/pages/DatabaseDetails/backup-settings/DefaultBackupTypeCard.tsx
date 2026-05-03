@@ -99,7 +99,7 @@ function DefaultBackupTypeCard({settings, onUpdate}: DefaultBackupTypeCardProps)
         }}
         onSave={handleSave}
       >
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
           <input
             type="radio"
             name="defaultBackupType"
@@ -114,7 +114,7 @@ function DefaultBackupTypeCard({settings, onUpdate}: DefaultBackupTypeCardProps)
         </label>
 
         {!isMongoDB && (
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
             <input
               type="radio"
               name="defaultBackupType"
@@ -130,7 +130,7 @@ function DefaultBackupTypeCard({settings, onUpdate}: DefaultBackupTypeCardProps)
         )}
 
         {allowedBackupTypes.includes("DATA_ONLY") && (
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
             <input
               type="radio"
               name="defaultBackupType"
@@ -145,7 +145,7 @@ function DefaultBackupTypeCard({settings, onUpdate}: DefaultBackupTypeCardProps)
           </label>
         )}
 
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           This backup type is used for scheduled backups and when no type is
           explicitly selected.
         </p>

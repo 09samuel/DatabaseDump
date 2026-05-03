@@ -25,25 +25,25 @@ function RenameBackupModal({ open, backupName, loading, onClose, onConfirm}: Ren
             }}
         >
             <div
-                className="bg-white rounded-lg p-6 w-full max-w-md"
+                className="bg-white dark:bg-neutral-900 rounded-lg p-6 w-full max-w-md border border-gray-200 dark:border-neutral-800"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="text-xl font-semibold">Rename Backup</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Rename Backup</h2>
 
                 <input
                     value={name}
                     maxLength={64}
                     disabled={loading}
                     onChange={(e) => setName(e.target.value)}
-                    className="mt-4 w-full border rounded p-2"
+                    className="mt-4 w-full border border-gray-200 dark:border-neutral-700 rounded p-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100"
                 />
 
                 <div className="flex gap-3 mt-5">
-                    <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed" onClick={onClose} disabled={loading}>
+                    <button className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed" onClick={onClose} disabled={loading}>
                         Cancel
                     </button>
 
-                    <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                    <button className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
                         disabled={loading}
                         onClick={() => onConfirm(name)}
                     >

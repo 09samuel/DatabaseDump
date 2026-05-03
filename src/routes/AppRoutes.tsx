@@ -14,6 +14,9 @@ import DatabaseDetailsPage from "../pages/DatabaseDetails/DatabaseDetailsPage";
 import DatabaseOverviewTab from "../pages/DatabaseDetails/tabs/DatabaseOverviewTab";
 import DatabaseBackupsTab from "../pages/DatabaseDetails/tabs/DatabaseBackupsTab";
 import DatabaseBackupSettingsTab from "../pages/DatabaseDetails/tabs/DatabaseBackupSettingsTab";
+import DatabaseAuditLogsTab from "../pages/DatabaseDetails/tabs/DatabaseAuditLogsTab";
+import AuditLogs from "../pages/AuditLogs/AuditLogs";
+import SettingsPage from "../pages/Settings/SettingsPage";
 
 const AppRoutes = () => {
   return (
@@ -32,10 +35,13 @@ const AppRoutes = () => {
           <Route index element={<Navigate to="databases" replace />} />
           <Route path="databases" element={<DatabasesPage />} />
           <Route path="backups" element={<BackupsPage />} />
+          <Route path="audit-logs" element={<AuditLogs />} />
+          <Route path="settings" element={<SettingsPage />} />
 
           <Route path="databases/:id" element={<DatabaseDetailsPage />}>
             <Route index element={<DatabaseOverviewTab />} />
             <Route path="backups" element={<DatabaseBackupsTab />} />
+            <Route path="audit-logs" element={<DatabaseAuditLogsTab />} />
             <Route path="settings/backups" element={<DatabaseBackupSettingsTab />} />
           </Route>
         </Route>

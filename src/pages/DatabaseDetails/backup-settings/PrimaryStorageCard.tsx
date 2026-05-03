@@ -173,7 +173,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
         onSave = {handleSave}
       >
         <div>
-          <label className="block text-sm mb-1">Storage type</label>
+          <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">Storage type</label>
           <select
             disabled={!editing}
             value={storageTarget}
@@ -181,7 +181,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
               setStorageTarget(e.target.value as any);
               clearError()  
             }}
-            className="w-full border rounded px-3 py-2 disabled:opacity-100"
+            className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
           >
             <option value="S3">S3</option>
             <option value="LOCAL">Local filesystem</option>
@@ -191,7 +191,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
         {storageTarget === "S3" && (
           <>
             <div>
-              <label className="block text-sm mb-1">S3 bucket</label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">S3 bucket</label>
               <input
                 disabled={!editing}
                 value={s3Bucket}
@@ -199,12 +199,12 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setS3Bucket(e.target.value);
                   clearError()  
                 }}
-                className="w-full border rounded px-3 py-2 disabled:opacity-100"
+                className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm mb-1">Region</label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">Region</label>
               <input
                 disabled={!editing}
                 value={s3Region}
@@ -212,12 +212,12 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setS3Region(e.target.value);
                   clearError()  
                 }}
-                className="w-full border rounded px-3 py-2 disabled:opacity-100"
+                className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm mb-1">IAM Backup Upload Role ARN</label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">IAM Backup Upload Role ARN</label>
               <input
                 disabled={!editing}
                 value={backupUploadRoleArn}
@@ -225,12 +225,12 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setBackupUploadRoleArn(e.target.value);
                   clearError()  
                 }}
-                className="w-full border rounded px-3 py-2 disabled:opacity-100"
+                className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm mb-1">IAM Backup Download/Restore Role ARN <span className="text-gray-400">(optional)</span> </label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">IAM Backup Download/Restore Role ARN <span className="text-gray-400 dark:text-gray-500">(optional)</span> </label>
               <input
                 disabled={!editing}
                 value={backupRestoreRoleArn}
@@ -238,12 +238,12 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setBackupRestoreRoleArn(e.target.value);
                   clearError()  
                 }}
-                className="w-full border rounded px-3 py-2 disabled:opacity-100"
+                className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm mb-1">IAM Backup Delete Role ARN <span className="text-gray-400">(optional)</span> </label>
+              <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">IAM Backup Delete Role ARN <span className="text-gray-400 dark:text-gray-500">(optional)</span> </label>
               <input
                 disabled={!editing}
                 value={backupDeleteRoleArn}
@@ -251,7 +251,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setBackupDeleteRoleArn(e.target.value);
                   clearError()  
                 }}
-                className="w-full border rounded px-3 py-2 disabled:opacity-100"
+                className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
               />
             </div>
           </>
@@ -259,7 +259,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
 
         {storageTarget === "LOCAL" && (
           <div>
-            <label className="block text-sm mb-1">Storage path</label>
+            <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">Storage path</label>
             <input
               disabled={!editing}
               value={localPath}
@@ -267,7 +267,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
                   setLocalPath(e.target.value);
                   clearError()  
               }}
-              className="w-full border rounded px-3 py-2 disabled:opacity-100"
+              className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
             />
           </div>
 
