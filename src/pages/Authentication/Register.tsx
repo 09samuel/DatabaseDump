@@ -86,7 +86,7 @@
                 setLoading(true);
                 setError("");
 
-                await registerUser(formData.name.trim(), formData.email, formData.password);
+                await registerUser(formData.name.trim(), formData.email, formData.password, formData.confirmPassword);
 
                 setStatusMessage({ type: "success", message: "Registration successful!" });
                 navigate("/dashboard", { replace: true });

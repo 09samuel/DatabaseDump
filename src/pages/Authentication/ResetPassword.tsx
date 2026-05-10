@@ -97,7 +97,7 @@
             <div className="min-h-screen flex  bg-white text-gray-900 dark:bg-neutral-950 dark:text-gray-100">
                 <ThemeToggle className="absolute top-4 right-4 z-20" />
 
-                <div className="flex items-center justify-center">
+                <div className="flex flex-1 items-center justify-center">
                     <div className="md:hidden absolute top-6 left-6 flex items-center gap-2">
                         <img src="/logo.svg" alt="logo" className="w-8 h-8" />
                         <span className="text-lg font-bold tracking-wide">

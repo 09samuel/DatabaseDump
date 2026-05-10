@@ -11,8 +11,13 @@ export async function forgotPassword(email: string): Promise<AuthMessageResponse
   return res.data;
 }
 
-export async function registerUser(name: string, email: string, password: string): Promise<AuthMessageResponse> {
-    const res = await api.post("/auth/register", { name, email, password });
+export async function registerUser(name: string, email: string, password: string, confirmPassword: string): Promise<AuthMessageResponse> {
+    const res = await api.post("/auth/register", { name, email, password, confirmPassword });
+    return res.data;
+}
+
+export async function verifyEmail(token: string): Promise<AuthMessageResponse> {
+    const res = await api.post("/auth/verify-email", { token });
     return res.data;
 }
 
@@ -22,7 +27,7 @@ export async function me(): Promise<MeResponse> {
 }
 
 export async function resetPassword(token: string, password: string): Promise<AuthMessageResponse> {
-    const res = await api.post("/auth/reset-password", { token, password });
+    const res = await api.post("/auth/reset-password", { token, newPassword: password });
     return res.data;
 }
 

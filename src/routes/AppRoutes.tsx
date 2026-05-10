@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "../pages/Authentication/Login";
 import RegisterPage from "../pages/Authentication/Register";
 import ResetPasswordPage from "../pages/Authentication/ResetPassword";
+import VerifyEmailPage from "../pages/Authentication/VerifyEmail";
 
 // dashboard
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
@@ -25,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+      <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
 
       {/* Root */}
       <Route path="/" element={<Navigate to="/dashboard/databases" replace />} />
