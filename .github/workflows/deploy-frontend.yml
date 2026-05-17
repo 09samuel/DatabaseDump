@@ -14,7 +14,7 @@ jobs:
         
         steps:
             - name: Checkout code
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
 
             - name: Set up Node.js
               uses: actions/setup-node@v6
@@ -29,17 +29,17 @@ jobs:
               run: npm run build
 
             - name: Configure AWS credentials   
-              uses: aws-actions/configure-aws-credentials@v4
+              uses: aws-actions/configure-aws-credentials@v6
               with:
                 aws-region: ap-south-1
                 role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
 
             - name: Upload to S3
               run: |
-                aws s3 sync build/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+                aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-            - name: Invalidate CloudFront cache
-              run: |
-                aws cloudfront create-invalidation \
-                    --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-                    --paths "/*"
+            # - name: Invalidate CloudFront cache
+            #   run: |
+            #     aws cloudfront create-invalidation \
+            #         --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            #         --paths "/*"
