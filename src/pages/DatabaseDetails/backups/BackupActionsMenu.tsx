@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import type { BackupStatus } from "../../Databases/types";
 import { EllipsisVertical } from "lucide-react";
 import StatusBar from "../../../components/StatusBar/StatusBar";
 import { deleteBackup, renameBackup } from "../../../services/backup.service";
@@ -9,11 +8,10 @@ import RenameBackupModal from "./RenameBackupModal";
 type BackupActionsMenuProps = {
     backupId: string;
     backupName: string | null;
-    status: BackupStatus;
     onActionSuccess: () => void;
 };
 
-function BackupActionsMenu({ backupId, backupName, status, onActionSuccess }: BackupActionsMenuProps) {
+function BackupActionsMenu({ backupId, backupName, onActionSuccess }: BackupActionsMenuProps) {
     const [open, setOpen] = useState(false);
     const [modal, setModal] = useState<"rename" | "delete" | null>(null);
     const [loading, setLoading] = useState(false);

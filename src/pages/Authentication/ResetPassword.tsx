@@ -12,7 +12,7 @@
         });
         const navigate = useNavigate();
         const [loading, setLoading] = useState(false);
-        const [error, setError] = useState("");
+        const [_error, setError] = useState("");
         const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error", message: string } | null>(null);
         const [validationErrors, setValidationErrors] = useState<{
             password?: string;

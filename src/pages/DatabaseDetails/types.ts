@@ -3,7 +3,7 @@ import type { BackupStatus, BackupType, StorageTarget } from "../Databases/types
 export type BackupSettings = {
   connectionId: string;
 
-  engine: "PostgreSQL" | "MySQL" | "MongoDB";
+  engine: "postgresql" | "mysql" | "mongodb"
 
   // Storage
   storageTarget: "S3" | "LOCAL";

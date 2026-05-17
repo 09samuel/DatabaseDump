@@ -104,7 +104,6 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                     <BackupActionsMenu
                         backupId={backupId}
                         backupName={backupName}
-                        status={status}
                         onActionSuccess={() => onBackupUpdated?.()}
                     />
                 )}

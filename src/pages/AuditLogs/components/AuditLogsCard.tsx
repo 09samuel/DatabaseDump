@@ -19,7 +19,6 @@ function statusStyles(status: AuditLog["status"]) {
 }
 
 function AuditLogsCard({
-  id,
   userId,
   userEmail,
   roleAtTime,

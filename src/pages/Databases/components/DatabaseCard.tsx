@@ -15,7 +15,7 @@ function DatabaseCard({ db, onBackup, onEdit, onDelete, onManageCollborators }: 
 
     const navigate = useNavigate()
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [_isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {

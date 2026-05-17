@@ -1,5 +1,5 @@
 import { api } from '../lib/api';
-import { mapAuditLogFromApi, type ApiAuditLog } from './audit-logs.mapper';
+import { mapAuditLogFromApi } from './audit-logs.mapper';
 import type { AuditLog } from '../pages/AuditLogs/types';
 
 export async function fetchAuditLogsByConnection(connectionId: string,params: {
