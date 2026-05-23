@@ -29,11 +29,11 @@ const AppRoutes = () => {
       <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
 
       {/* Root */}
-      <Route path="/" element={<Navigate to="/dashboard/databases" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
-        <Route path="dashboard" element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Navigate to="databases" replace />} />
           <Route path="databases" element={<DatabasesPage />} />
           <Route path="backups" element={<BackupsPage />} />
