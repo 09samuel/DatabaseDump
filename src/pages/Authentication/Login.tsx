@@ -123,10 +123,10 @@
                 <ThemeToggle className="absolute top-4 right-4 z-20" />
                 <div className="hidden md:flex w-1/2 bg-gray-100 text-gray-900 dark:bg-neutral-900 dark:text-gray-100 p-10 flex-col justify-center gap-6 relative">
                     <div className="absolute top-6 left-6 flex items-center gap-2">
-                        <img src="/logo.svg" alt="logo" className="w-8 h-8" />
+                        {/* <img src="/logo.svg" alt="logo" className="w-8 h-8" /> */}
                         <span className="text-lg font-bold tracking-wide">
-                            <span>Your</span>
-                            <span className="text-blue-400">Brand</span>
+                            <span>Database</span>
+                            <span className="text-blue-400">Dump</span>
                         </span>
                     </div>
 

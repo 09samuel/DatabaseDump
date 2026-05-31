@@ -15,7 +15,7 @@ function Sidebar() {
           className="p-4 flex justify-center items-center"
           onClick={() => setExpanded((curr) => !curr)}
         >
-          <img src={Logo} alt="Logo" className="h-8 w-8" />
+          {/* <img src={Logo} alt="Logo" className="h-8 w-8" /> */}
           <h1 className={`ps-4 font-semibold text-gray-900 dark:text-gray-100 ${expanded ? "visible" : "hidden"}`}>
             DatabaseDump
           </h1>
