@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Logo from "../../assets/react.svg"
+// import Logo from "../../assets/react.svg"
 import SidebarItem from "./SidebarItem"
 import { dashboardMenuItems, dashboardGeneralItems } from "./menuItems"
 import LogoutModal from "../Logout/LogoutModal"
