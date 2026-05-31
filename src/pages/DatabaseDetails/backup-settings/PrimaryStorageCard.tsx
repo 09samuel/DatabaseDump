@@ -184,7 +184,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
             className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"
           >
             <option value="S3">S3</option>
-            <option value="LOCAL">Local filesystem</option>
+            {/* <option value="LOCAL">Local filesystem</option> */}
           </select>
         </div>
 
