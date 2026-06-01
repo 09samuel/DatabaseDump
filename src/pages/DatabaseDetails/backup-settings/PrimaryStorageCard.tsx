@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SettingsCard from "../components/SettingsCard";
 import type { BackupSettings } from "../../DatabaseDetails/types";
 import StatusBar from "../../../components/StatusBar/StatusBar";
+import { Info, X, Copy, Check } from "lucide-react";
 
 type PrimaryStorageCardProps = {
   settings: BackupSettings,
@@ -12,6 +13,47 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
   const [editing, setEditing] = useState(false);
 
   const [storageTarget, setStorageTarget] = useState(settings.storageTarget);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const trustJson = `{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::165772574272:user/DatabaseDumpIAM"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": "database-dump"
+        }
+      }
+    }
+  ]
+}`;
+
+  const policyJson = `{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    }
+  ]
+}`;
+
+  const handleCopy = (text: string, type: 'trust' | 'policy') => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(type);
+    setTimeout(() => setCopiedText(null), 2000);
+  };
   const [s3Bucket, setS3Bucket] = useState(settings.s3Bucket ?? "");
   const [s3Region, setS3Region] = useState(settings.s3Region ?? "");
   const [backupUploadRoleArn, setBackupUploadRoleArn] = useState(settings.backupUploadRoleArn ?? "")
@@ -156,7 +198,19 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
   return (
     <>
       <SettingsCard
-        title="Primary Storage Target"
+        title={
+          <div className="flex items-center gap-2">
+            <span>Primary Storage Target</span>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer flex items-center justify-center"
+              title="How to configure AWS S3"
+            >
+              <Info className="h-4 w-4" />
+            </button>
+          </div>
+        }
         editing={editing}
         onEdit={() => setEditing(true)}
         onCancel={() => {
@@ -283,6 +337,123 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
           message={statusMessage.message}
           onClose={() => setStatusMessage(null)}
         />
+      )}
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-gray-200 dark:border-neutral-800 w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col transform scale-100 transition-all duration-300 animate-in fade-in zoom-in-95">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-neutral-800 sticky top-0 bg-white dark:bg-neutral-900 z-10">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Info className="h-5 w-5 text-blue-500" />
+                AWS S3 Integration Guide
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6 text-sm text-gray-650 dark:text-gray-300 leading-relaxed overflow-y-auto">
+              <p>
+                This platform uses secure <strong>AWS IAM Role Assumption (STS AssumeRole)</strong> to write and manage database backups directly in your S3 buckets. We never store permanent AWS credentials.
+              </p>
+
+              {/* Step 1 */}
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                  <span className="flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">1</span>
+                  Create an IAM Policy
+                </h4>
+                <p className="pl-7">
+                  Create a policy in your AWS account to permit S3 actions on your target bucket. Replace <code>YOUR_BUCKET_NAME</code> with your actual bucket name.
+                </p>
+                <div className="pl-7 relative">
+                  <pre className="bg-gray-50 dark:bg-neutral-950 p-4 rounded-lg overflow-x-auto text-xs font-mono text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-neutral-800">
+                    {policyJson}
+                  </pre>
+                  <button
+                    onClick={() => handleCopy(policyJson, 'policy')}
+                    className="absolute top-2 right-4 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 border border-gray-200 dark:border-neutral-700 text-gray-600 dark:text-gray-300 p-1.5 rounded-md transition-colors flex items-center gap-1.5 text-xs shadow-xs cursor-pointer"
+                  >
+                    {copiedText === 'policy' ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-green-500" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Copy JSON</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                  <span className="flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">2</span>
+                  Create IAM Role with Trust Policy
+                </h4>
+                <p className="pl-7">
+                  Create a new IAM Role in your AWS account and configure its Trust Relationship. Paste the following Trust Policy to authorize our backend identity to assume the role.
+                </p>
+                <div className="pl-7 relative">
+                  <pre className="bg-gray-50 dark:bg-neutral-950 p-4 rounded-lg overflow-x-auto text-xs font-mono text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-neutral-800">
+                    {trustJson}
+                  </pre>
+                  <button
+                    onClick={() => handleCopy(trustJson, 'trust')}
+                    className="absolute top-2 right-4 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 border border-gray-200 dark:border-neutral-700 text-gray-600 dark:text-gray-300 p-1.5 rounded-md transition-colors flex items-center gap-1.5 text-xs shadow-xs cursor-pointer"
+                  >
+                    {copiedText === 'trust' ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-green-500" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Copy JSON</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                  <span className="flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">3</span>
+                  Configure Role ARN in Backup Settings
+                </h4>
+                <ul className="list-disc pl-12 space-y-1">
+                  <li><strong>IAM Backup Upload Role ARN</strong> (Required): Paste the Role ARN here.</li>
+                  <li><strong>IAM Backup Download/Restore Role ARN</strong> (Optional): Paste the Role ARN to support database restores.</li>
+                  <li><strong>IAM Backup Delete Role ARN</strong> (Optional): Paste the Role ARN to enable automatic retention cleaning.</li>
+                </ul>
+                <p className="pl-7 text-xs text-gray-500 dark:text-gray-400">
+                  Tip: You can use a single IAM Role containing all permissions (Upload, Restore, and Delete) across all inputs.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex justify-end bg-gray-50 dark:bg-neutral-900/50 rounded-b-xl sticky bottom-0 z-10">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-lg transition-colors cursor-pointer"
+              >
+                Close Guide
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

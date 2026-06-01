@@ -1,6 +1,6 @@
 
 type SettingsCardProps = {
-    title: string;
+    title: React.ReactNode;
     editing: boolean;
     disableEdit?: boolean;
     onEdit: () => void;
