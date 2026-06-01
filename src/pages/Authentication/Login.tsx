@@ -167,10 +167,10 @@
                 </div>
                 <div className="flex-1 flex items-center justify-center">
                     <div className="md:hidden absolute top-6 left-6 flex items-center gap-2">
-                        <img src="/logo.svg" alt="logo" className="w-8 h-8" />
+                        {/* <img src="/logo.svg" alt="logo" className="w-8 h-8" /> */}
                         <span className="text-lg font-bold tracking-wide">
-                            <span>Your</span>
-                            <span className="text-blue-400">Brand</span>
+                            <span>Database</span>
+                            <span className="text-blue-400">Dump</span>
                         </span>
                     </div>
 
