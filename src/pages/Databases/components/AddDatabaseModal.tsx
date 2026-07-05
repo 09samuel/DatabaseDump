@@ -3,6 +3,7 @@ import { Info } from "lucide-react";
 import type { BackendVerifyState, DatabaseEngine, SSLMode, VerifyState } from "../types";
 import { addDatabase, getConnectionStatus, verifyConnection, verifyDryRun } from "../../../services/database.service";
 import StatusBar from "../../../components/StatusBar/StatusBar";
+import { validateDatabaseConnection } from "../../../utils/validators";
 
 type AddDatabaseModalProps = {
     onClose: () => void
@@ -68,9 +69,9 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         } catch {
             localStorage.removeItem(STORAGE_KEY);
         }
-    }, []); 
+    }, []);
 
-    
+
     // Save form data to localStorage on change
     useEffect(() => {
         // Skip saving if all fields are empty (initial state)
@@ -135,21 +136,21 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
                     localStorage.removeItem(STORAGE_KEY)
                     resetForm()
-                    
+
                     onSuccess()
                     onClose()
 
                     return
-            }
+                }
 
-            if (res.status === "ERROR") {
-                setBackendVerifyState("ERROR")
-                setStatusMessage({
-                    type: "error",
-                    message: res.errorMessage || "Verification failed",
-                })
-                return
-            }
+                if (res.status === "ERROR") {
+                    setBackendVerifyState("ERROR")
+                    setStatusMessage({
+                        type: "error",
+                        message: res.errorMessage || "Verification failed",
+                    })
+                    return
+                }
 
                 setTimeout(poll, 2500)
             } catch {
@@ -222,7 +223,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
         const errors = validateForm()
         if (errors.length > 0) {
             setFormErrors(errors)
-            
+
             setStatusMessage({
                 type: "error",
                 message: errors[0] // Show first error
@@ -296,137 +297,46 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
     //validations
     const validateForm = (): string[] => {
-        const errors: string[] = [];
-
-        const trimmedDatabaseName = databaseName.trim();
-        const trimmedHost = host.trim();
-        const trimmedUsername = username.trim();
-        const trimmedPassword = password.trim();
-
-        // Database name: required, alphanumeric + underscores/dashes, 1–64 chars
-        if (!trimmedDatabaseName) {
-            errors.push("Database name is required");
-        } else if (!/^[a-zA-Z0-9_-]+$/.test(trimmedDatabaseName)) {
-            errors.push("Database name must contain only letters, numbers, underscores, or dashes");
-        } else if (trimmedDatabaseName.length > 64) {
-            errors.push("Database name must be 1–64 characters");
-        }
-
-        // Host: 1–253 chars, required, valid hostname or IPv4
-        if (!trimmedHost) {
-            errors.push("Host is required");
-        } else if (trimmedHost.length > 253) {
-            errors.push("Host must be at most 253 characters");
-        } else if (
-            !/^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)$|^(\d{1,3}\.){3}\d{1,3}$/.test(
-            trimmedHost
-            )
-        ) {
-            errors.push("Host must be a valid hostname or IP address");
-        }
-
-        // Port: required, valid range unless mongodb
-        const portNum = Number(port);
-
-        if (dbEngine !== "mongodb") {
-            if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
-                errors.push("Port must be a valid number between 1–65535");
-            }
-        }
-
-        // Engine: required
-        if (!dbEngine) {
-            errors.push("Database engine is required");
-        }
-
-        // Environment: required
-        if (!environment) {
-            errors.push("Environment is required");
-        }
-
-        // Username & Password validation
-        if (dbEngine === "postgresql") {
-            if (!trimmedUsername) {
-                errors.push("Username is required");
-            }
-
-            if (!trimmedPassword) {
-                errors.push("Password is required");
-            }
-
-        } else if (dbEngine === "mysql") {
-            if (!trimmedUsername) {
-                errors.push("Username is required");
-            }
-
-            // Password optional for MySQL
-            if (trimmedPassword.length > 128) {
-                errors.push("Password must be at most 128 characters");
-            }
-        } else {
-            // MongoDB
-            // If one is provided, both must be provided
-            if ((trimmedUsername && !trimmedPassword) || (!trimmedUsername && trimmedPassword)) {
-                errors.push("Both username and password are required when using MongoDB authentication");
-            }
-
-            if (trimmedUsername.length > 64) {
-                errors.push("Username must be at most 64 characters");
-            }
-
-            if (trimmedPassword.length > 128) {
-                errors.push("Password must be at most 128 characters");
-            }
-        }
-
-        // SSL validation (Postgres & MySQL only)
-        if (dbEngine === "postgresql") {
-        const validPgModes = ["disable", "require", "verify-ca", "verify-full"];
-
-            if (!sslMode || !validPgModes.includes(sslMode)) {
-                errors.push("Invalid SSL mode selected for PostgreSQL");
-            }
-        }
-
-        if (dbEngine === "mysql") {
-            const validMysqlModes = ["disable", "require"];
-
-            if (!sslMode || !validMysqlModes.includes(sslMode)) {
-                errors.push("Invalid SSL mode selected for MySQL");
-            }
-        }
-
-        return errors;
+        return validateDatabaseConnection({
+            databaseName,
+            host,
+            port,
+            dbEngine,
+            environment,
+            username,
+            password,
+            sslMode,
+        });
     };
 
 
     return (
         <div
             className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 px-4 py-6 sm:px-6 sm:py-10"
-       
+
             onClick={(e) => {
                 if (e.target === e.currentTarget) {
                     onClose()
                 }
             }}
         >
-            <form  onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-md max-h-[90vh] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg shadow-lg p-6 flex flex-col gap-4">
+            <form onSubmit={handleAddDatabase} onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-md max-h-[90vh] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg shadow-lg p-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-1" >
                     <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Add Database</span>
                     <span className="text-gray-500 dark:text-gray-400">
                         Fill in the details to add a new database connection
                     </span>
                 </div>
-            
+
 
                 {/* Form fields container */}
                 <div className="flex flex-col gap-4 max-w-md overflow-y-auto md:no-scrollbar flex-1 min-h-0">
-                {/* <div className="flex-1 min-h-0"></div> */}
+                    {/* <div className="flex-1 min-h-0"></div> */}
                     <input
                         type="text"
                         value={databaseName}
                         disabled={isLocked}
-                        onChange={(e) => setDatabaseName(e.target.value)} 
+                        onChange={(e) => setDatabaseName(e.target.value)}
                         placeholder="Database Name"
                         className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
@@ -435,7 +345,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         type="text"
                         value={host}
                         disabled={isLocked}
-                        onChange={(e) => setHost(e.target.value)} 
+                        onChange={(e) => setHost(e.target.value)}
                         placeholder="Host"
                         className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
@@ -449,62 +359,62 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                             setPort(v === "" ? null : Number(v));
                         }}
                         placeholder={dbEngine === "mongodb" ? "Not required for MongoDB Atlas" : "Port"}
-                                className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800"
-                     />
+                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800"
+                    />
 
 
                     {/* Database Engine */}
                     <div className="flex flex-col gap-1">
-                    <label htmlFor="dbEngine" className="font-medium text-gray-700 dark:text-gray-300">
-                        Database engine
-                    </label>
-                    <select
-                        id="dbEngine"
-                        value={dbEngine ?? ""}
-                        disabled={isLocked}
-                        onChange={(e) => setDbEngine(e.target.value === "" ? null : (e.target.value as DatabaseEngine)) }
-                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
-                    >
-                        <option value="">Select engine</option>
-                        <option value="postgresql">PostgreSQL</option>
-                        <option value="mysql">MySQL</option>
-                        <option value="mongodb">MongoDB</option>
-                    </select>
+                        <label htmlFor="dbEngine" className="font-medium text-gray-700 dark:text-gray-300">
+                            Database engine
+                        </label>
+                        <select
+                            id="dbEngine"
+                            value={dbEngine ?? ""}
+                            disabled={isLocked}
+                            onChange={(e) => setDbEngine(e.target.value === "" ? null : (e.target.value as DatabaseEngine))}
+                            className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
+                        >
+                            <option value="">Select engine</option>
+                            <option value="postgresql">PostgreSQL</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="mongodb">MongoDB</option>
+                        </select>
                     </div>
 
                     {/* SSL Mode */}
                     {(dbEngine === "postgresql" || dbEngine === "mysql") && (
                         <div className="flex flex-col gap-1">
                             <label htmlFor="sslMode" className="font-medium text-gray-700 dark:text-gray-300">
-                            SSL Mode
+                                SSL Mode
                             </label>
                             <select
                                 id="sslMode"
                                 value={sslMode ?? "disable"}
                                 disabled={isLocked}
-                                onChange={(e) => setSslMode(e.target.value === "" ? null : (e.target.value as SSLMode)) }
+                                onChange={(e) => setSslMode(e.target.value === "" ? null : (e.target.value as SSLMode))}
                                 className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                             >
-                            {dbEngine === "postgresql" && (
-                                <>
-                                <option value="disable">Disable</option>
-                                <option value="prefer">Prefer</option>
-                                <option value="require">Require</option>
-                                <option value="verify-ca">Verify CA</option>
-                                <option value="verify-full">Verify Full</option>
-                                </>
-                            )}
+                                {dbEngine === "postgresql" && (
+                                    <>
+                                        <option value="disable">Disable</option>
+                                        <option value="prefer">Prefer</option>
+                                        <option value="require">Require</option>
+                                        <option value="verify-ca">Verify CA</option>
+                                        <option value="verify-full">Verify Full</option>
+                                    </>
+                                )}
 
-                            {dbEngine === "mysql" && (
-                                <>
-                                <option value="disable">Disable</option>
-                                <option value="require">Require</option>
-                                </>
-                            )}
+                                {dbEngine === "mysql" && (
+                                    <>
+                                        <option value="disable">Disable</option>
+                                        <option value="require">Require</option>
+                                    </>
+                                )}
                             </select>
 
                             <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Hosted databases usually require SSL.
+                                Hosted databases usually require SSL.
                             </span>
                         </div>
                     )}
@@ -512,28 +422,28 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
                     {/* Environment */}
                     <div className="flex flex-col gap-1">
-                    <label htmlFor="environment" className="font-medium text-gray-700 dark:text-gray-300">
-                        Environment
-                    </label>
-                    <select
-                        id="environment"
-                        value={environment}
-                        disabled={isLocked}
-                        onChange={(e) => setEnvironment(e.target.value)} 
-                        className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
-                    >
-                        <option value="">Select environment</option>
-                        <option value="development">Development</option>
-                        <option value="staging">Staging</option>
-                        <option value="production">Production</option>
-                    </select>
+                        <label htmlFor="environment" className="font-medium text-gray-700 dark:text-gray-300">
+                            Environment
+                        </label>
+                        <select
+                            id="environment"
+                            value={environment}
+                            disabled={isLocked}
+                            onChange={(e) => setEnvironment(e.target.value)}
+                            className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
+                        >
+                            <option value="">Select environment</option>
+                            <option value="development">Development</option>
+                            <option value="staging">Staging</option>
+                            <option value="production">Production</option>
+                        </select>
                     </div>
 
                     <input
                         type="text"
                         value={username}
                         disabled={isLocked}
-                        onChange={(e) => setUsername(e.target.value)} 
+                        onChange={(e) => setUsername(e.target.value)}
                         placeholder="Username"
                         className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
@@ -542,7 +452,7 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         type="password"
                         value={password}
                         disabled={isLocked}
-                        onChange={(e) => setPassword(e.target.value)} 
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
                         className="p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed"
                     />
@@ -550,12 +460,12 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
 
 
                 <div className="flex gap-3 mt-4 max-w-md">
-                    <button 
-                        type="button" 
-                        onClick={handleVerify} 
+                    <button
+                        type="button"
+                        onClick={handleVerify}
                         disabled={verifyState === "verifying" || backendVerifyState === "VERIFYING"}
                         className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
+                    >
                         {verifyState === "verifying" ? "Verifying..." : "Verify Connection"}
                     </button>
 
@@ -563,8 +473,8 @@ function AddDatabaseModal({ onClose, onSuccess }: AddDatabaseModalProps) {
                         type="submit"
                         disabled={!isVerified || loading || isLocked}
                         className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                        {backendVerifyState === "VERIFYING" ? "Verifying...": loading ? "Adding..." : "Add Database"}
+                    >
+                        {backendVerifyState === "VERIFYING" ? "Verifying..." : loading ? "Adding..." : "Add Database"}
                     </button>
                 </div>
 

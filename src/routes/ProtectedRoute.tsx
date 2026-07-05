@@ -5,7 +5,7 @@ import { useUserStore } from "../store/userStore";
 const ProtectedRoute = () => {
     const { user, loading, initialized, fetchUser } = useUserStore();
 
-    const location =  useLocation();
+    const location = useLocation();
 
     useEffect(() => {
         if (!initialized) {
@@ -17,7 +17,7 @@ const ProtectedRoute = () => {
         return <div>Loading...</div>;
     }
 
-    return user ? <Outlet /> : <Navigate to="/login" replace state={{from: location}} />;
+    return user ? <Outlet /> : <Navigate to="/login" replace state={{ from: location }} />;
 };
 
 export default ProtectedRoute;

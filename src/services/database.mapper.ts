@@ -1,6 +1,6 @@
 import type { BackupStatus, ConnectionStatus, Database, DatabaseBasicDetails, DatabaseDetails, DatabaseOverview, DatabaseEngine, SSLMode } from "../pages/Databases/types"
 
-type ApiDatabase = {
+export type ApiDatabase = {
   id: string
   db_name: string
   db_type: string
@@ -11,7 +11,7 @@ type ApiDatabase = {
   storageUsedGB: number
 }
 
-type ApiDatabaseDetails = {
+export type ApiDatabaseDetails = {
   dbName: string
   dbHost: string
   dbPort: number | null
@@ -21,7 +21,7 @@ type ApiDatabaseDetails = {
   sslMode: string | null
 }
 
-type ApiDatabaseOverview = {
+export type ApiDatabaseOverview = {
   db_name: string
   db_type: string
   env_tag: string
@@ -34,11 +34,11 @@ type ApiDatabaseOverview = {
   storage_used_bytes: number
 }
 
-type ApiDatabseBasicDetails = {
+export type ApiDatabaseBasicDetails = {
   db_name: string,
-  db_type: string, 
-  env_tag: string, 
-  status: ConnectionStatus
+  db_type: string,
+  env_tag: string,
+  status: string,
 }
 
 export function mapDatabaseFromApi(db: ApiDatabase): Database {
@@ -66,8 +66,8 @@ export function mapDatabaseDetailsFromApi(db: ApiDatabaseDetails): DatabaseDetai
   }
 }
 
-export function mapDatabaseOverviewFromApi(db: ApiDatabaseOverview): DatabaseOverview{
-  return{
+export function mapDatabaseOverviewFromApi(db: ApiDatabaseOverview): DatabaseOverview {
+  return {
     name: db.db_name,
     engine: normalizeEngine(db.db_type),
     environment: db.env_tag,
@@ -80,10 +80,10 @@ export function mapDatabaseOverviewFromApi(db: ApiDatabaseOverview): DatabaseOve
     totalstorageUsed: db.storage_used_bytes,
     sslMode: normalizeSSLMode(db.ssl_mode)
   }
-    
+
 }
 
-export function mapDatabaseBasicDetailsFromApi(db: ApiDatabseBasicDetails): DatabaseBasicDetails {
+export function mapDatabaseBasicDetailsFromApi(db: ApiDatabaseBasicDetails): DatabaseBasicDetails {
   return {
     name: db.db_name,
     engine: normalizeEngine(db.db_type),
@@ -125,7 +125,7 @@ function normalizeStatus(status: string): ConnectionStatus {
   }
 }
 
-function normalizeBackupStatus(status: string | null ): BackupStatus | null {
+function normalizeBackupStatus(status: string | null): BackupStatus | null {
   if (!status) return null
 
   switch (status) {
