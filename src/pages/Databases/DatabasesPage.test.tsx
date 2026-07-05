@@ -6,7 +6,7 @@ import { server } from "../../test/mocks/server";
 
 describe('DatabasesPage', () => {
     vi.mock("react-router-dom", async () => {
-        const actual = await vi.importActual("react-router-dom") as any;
+        const actual = await vi.importActual("react-router-dom") as Record<string, unknown>;
         return {
             ...actual,
             useOutletContext: () => ({ dbSearch: "" }), // Mock outlet context
@@ -32,7 +32,7 @@ describe('DatabasesPage', () => {
 
         render(<DatabasesPage />);
 
-        const skeletons = document.querySelectorAll('.animate-pulse'); 4
+        const skeletons = document.querySelectorAll('.animate-pulse');
         expect(skeletons.length).toBeGreaterThan(0)
     })
 

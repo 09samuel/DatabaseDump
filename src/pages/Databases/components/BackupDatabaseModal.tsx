@@ -58,9 +58,9 @@ function BackupDatabaseModal({ dbId, dbName, engine, environment, onClose, onBac
 
                 setCapabilities(cap);
                 setBackupSettings(settings);
-            } catch{
+            } catch {
                 setCapabilitiesError("Failed to load backup capabilities");
-                setStatusMessage({ type: "error", message: capabilitiesError ?? "Failed to fetch capabilities." });
+                setStatusMessage({ type: "error", message: "Failed to fetch capabilities." });
 
                 setTimeout(() => { setStatusMessage(null);}, 3000);
             }

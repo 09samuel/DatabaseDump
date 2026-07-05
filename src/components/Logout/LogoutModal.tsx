@@ -7,13 +7,14 @@ type LogOutModalProps = {
     onClose: () => void;
 }
 
-function LogOutModal ({ open, onClose }: LogOutModalProps) {
-    if (!open) return null;
+function LogOutModal({ open, onClose }: LogOutModalProps) {
 
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const onConfirm = async() => {
+    if (!open) return null;
+
+    const onConfirm = async () => {
         try {
             setLoading(true);
             await logout()
@@ -54,7 +55,7 @@ function LogOutModal ({ open, onClose }: LogOutModalProps) {
                         {loading ? "Logging out..." : "Logout"}
                     </button>
 
-                   
+
                 </div>
             </div>
         </div>

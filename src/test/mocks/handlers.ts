@@ -3,7 +3,7 @@ import { http, HttpResponse } from "msw";
 export const handlers = [
     // Dry run connection verification
     http.post("http://localhost:3000/connections/verify-dry-run", async ({ request }) => {
-        const body = await request.json() as any;
+        const body = await request.json() as { dbUserSecret?: string };
 
         // Simple mock validation rule: fail if password is 'fail-pass'
         if (body.dbUserSecret === "fail-pass") {

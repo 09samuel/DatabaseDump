@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
 import { getInitialTheme, setThemePreference, type Theme } from "../../utils/theme";
 
 function SettingsPage() {
-  const [theme, setTheme] = useState<Theme>("light");
-
-  useEffect(() => {
-    setTheme(getInitialTheme());
-  }, []);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   const handleThemeChange = (nextTheme: Theme) => {
     setTheme(nextTheme);

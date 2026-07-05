@@ -93,7 +93,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
         return "IAM Backup Upload Role ARN is required";
       }
 
-      const IAM_ROLE_ARN_REGEX = /^arn:aws:iam::\d{12}:role\/[A-Za-z0-9+=,.@_\-\/]+$/;
+      const IAM_ROLE_ARN_REGEX = /^arn:aws:iam::\d{12}:role\/[A-Za-z0-9+=,.@_\-/]+$/;
 
       if (!IAM_ROLE_ARN_REGEX.test(backupUploadRoleArn.trim())) {
         return "Invalid IAM Backup Upload ARN format";
@@ -232,7 +232,7 @@ function PrimaryStorageCard({ settings, onUpdate }: PrimaryStorageCardProps) {
             disabled={!editing}
             value={storageTarget}
             onChange={(e) => {
-              setStorageTarget(e.target.value as any);
+              setStorageTarget(e.target.value as "S3" | "LOCAL");
               clearError()  
             }}
             className="w-full border border-gray-200 dark:border-neutral-700 rounded px-3 py-2 bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-100 disabled:opacity-100"

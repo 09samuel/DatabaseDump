@@ -44,8 +44,9 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                 message: "Database restoration started successfully",
             });
 
-        } catch (err: any) {
-            setStatusMessage({type: "error", message: err?.response?.data?.message || err?.response?.data?.error || err?.message || "Failed to start restore"})
+        } catch (err) {
+            const errorObj = err as { response?: { data?: { message?: string; error?: string } }; message?: string };
+            setStatusMessage({type: "error", message: errorObj?.response?.data?.message || errorObj?.response?.data?.error || errorObj?.message || "Failed to start restore"})
         } finally {
             setRestoring(false);
         }
@@ -66,10 +67,11 @@ function BackupItem({ backupId, dbId, backupName, backupType, backupSizeBytes, s
                 message: `Download started. Verify ${algo.toUpperCase()} checksum after download.`,
             });
 
-        } catch (err: any) {
+        } catch (err) {
+            const errorObj = err as { response?: { data?: { message?: string } } };
             setStatusMessage({
             type: "error",
-            message: err?.response?.data?.message || "Failed to download backup",
+            message: errorObj?.response?.data?.message || "Failed to download backup",
             });
         } finally {
             setDownloading(false);

@@ -51,12 +51,7 @@ function SchedulingCard({ settings, onUpdate}: SchedulingCardProps ) {
         }
       };
 
-      //Clear cron when disabling scheduling
-      useEffect(() => {
-        if (!enabled) {
-          setCron("");
-        }
-      }, [enabled]);
+
           
       const validate = (): string | null => {
 
@@ -138,7 +133,10 @@ function SchedulingCard({ settings, onUpdate}: SchedulingCardProps ) {
                 checked={enabled}
                 onChange={(e) => {
                   setEnabled(e.target.checked);
-                  clearError()
+                  if (!e.target.checked) {
+                    setCron("");
+                  }
+                  clearError();
                 }}
               />
               Enable scheduled backups

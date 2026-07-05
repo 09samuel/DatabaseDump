@@ -21,7 +21,7 @@ function ManageCollaboratorsModal({ dbId, onClose }: ManageCollaboratorsModalPro
         try {
             const data = await getCollaborators(dbId);
             setCollaborators(data);
-        } catch (err) {
+        } catch {
             setStatusMessage({ type: "error", message: "Failed to load collaborators" });
         } finally {
             setLoading(false);
@@ -43,7 +43,7 @@ function ManageCollaboratorsModal({ dbId, onClose }: ManageCollaboratorsModalPro
             const result = await deleteCollaborator(dbId, userId);
             setCollaborators(prev => prev.filter(c => c.id !== userId));
             setStatusMessage({ type: "success", message: result.message });
-        } catch (err) {
+        } catch {
             setStatusMessage({ type: "error", message: "Failed to remove collaborator" });
         }
     };
@@ -53,7 +53,7 @@ function ManageCollaboratorsModal({ dbId, onClose }: ManageCollaboratorsModalPro
             const result = await updateCollaboratorRole(dbId, userId, role);
             setCollaborators(prev => prev.map(c => c.id === userId ? { ...c, role } : c));
             setStatusMessage({ type: "success", message: result.message });
-        } catch (err) {
+        } catch {
             setStatusMessage({ type: "error", message: "Failed to update collaborator role" });
         }
     };
@@ -66,7 +66,7 @@ function ManageCollaboratorsModal({ dbId, onClose }: ManageCollaboratorsModalPro
             setNewEmail("");
             // API doesn't return object, so we refresh the list
             fetchCollaborators();
-        } catch (err) {
+        } catch {
             setStatusMessage({ type: "error", message: "Failed to invite collaborator" });
         }
     };

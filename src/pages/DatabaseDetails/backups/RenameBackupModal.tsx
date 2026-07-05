@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type RenameBackupModalProps = {
     open: boolean;
@@ -9,11 +9,13 @@ type RenameBackupModalProps = {
 };
 
 function RenameBackupModal({ open, backupName, loading, onClose, onConfirm}: RenameBackupModalProps) {
-    const [name, setName] = useState("");
+    const [prevBackupName, setPrevBackupName] = useState(backupName);
+    const [name, setName] = useState(backupName ?? "");
 
-    useEffect(() => {
-        if (open) setName(backupName ?? "");
-    }, [open, backupName]);
+    if (backupName !== prevBackupName) {
+        setPrevBackupName(backupName);
+        setName(backupName ?? "");
+    }
 
     if (!open) return null;
 

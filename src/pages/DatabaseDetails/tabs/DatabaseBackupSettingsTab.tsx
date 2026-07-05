@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { BackupSettings } from "../../DatabaseDetails/types";
 import { getBackupSettings, updateBackupSettings } from "../../../services/backup-settings.service";
 import { useParams } from "react-router-dom";
@@ -18,13 +18,13 @@ export default function DatabaseBackupSettingsTab() {
 
   const { id } = useParams<{ id: string }>();
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     if (!id) {
       throw new Error("Database ID is missing in URL parameters.");
     }
     const data = await getBackupSettings(id);
     setSettings(data);
-  };
+  }, [id]);
 
 
   //update settings
@@ -75,7 +75,7 @@ export default function DatabaseBackupSettingsTab() {
     }
 
     load();
-  }, [id]);
+  }, [id, fetchSettings]);
 
   if (error && !loading) {
     return (

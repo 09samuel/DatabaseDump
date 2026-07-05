@@ -11,7 +11,7 @@
         });
         const navigate = useNavigate();
         const [loading, setLoading] = useState(false);
-        const [_error, setError] = useState("");
+        const [, setError] = useState("");
         const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error", message: string } | null>(null);
         const [validationErrors, setValidationErrors] = useState<{
             email?: string;
@@ -85,8 +85,8 @@
 
                 setStatusMessage({ type: "success", message: "Login successful!" });
                 navigate("/dashboard", { replace: true });
-            } catch (err: any) {
-                const message =  err.response?.data?.message || "Login failed. Please try again.";
+            } catch (err) {
+                const message = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Login failed. Please try again.";
                 setError(message);
                 setStatusMessage({ type: "error", message });
             } finally {
@@ -111,8 +111,8 @@
                     message: "If email exists, password reset link sent to your email",
                 });
 
-            } catch (err: any) {
-                const message =  err.response?.data?.message || "Something went wrong";
+            } catch (err) {
+                const message = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Something went wrong";
 
                 setStatusMessage({ type: "error", message });
             } 

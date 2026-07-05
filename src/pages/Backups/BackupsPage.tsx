@@ -31,22 +31,6 @@ function BackupsPage() {
         sortBy: "latest"
     });
 
-    const getSortParams = () => {
-        if (filters.sortBy === "latest") {
-            return { sortBy: "created_at", sortOrder: "desc" };
-        }
-        if (filters.sortBy === "oldest") {
-            return { sortBy: "created_at", sortOrder: "asc" };
-        }
-        if (filters.sortBy === "sizeDesc") {
-            return { sortBy: "backup_size_bytes", sortOrder: "desc" };
-        }
-        if (filters.sortBy === "sizeAsc") {
-            return { sortBy: "backup_size_bytes", sortOrder: "asc" };
-        }
-        return { sortBy: "created_at", sortOrder: "desc" };
-    };
-
     //debounce search input to avoid too many API calls
     useEffect(() => {
         const t = setTimeout(() => {
@@ -66,7 +50,21 @@ function BackupsPage() {
 
 
     //update sort params when sortBy filter changes
-    const sortParams = useMemo(() => getSortParams(), [filters.sortBy]);
+    const sortParams = useMemo(() => {
+        if (filters.sortBy === "latest") {
+            return { sortBy: "created_at", sortOrder: "desc" };
+        }
+        if (filters.sortBy === "oldest") {
+            return { sortBy: "created_at", sortOrder: "asc" };
+        }
+        if (filters.sortBy === "sizeDesc") {
+            return { sortBy: "backup_size_bytes", sortOrder: "desc" };
+        }
+        if (filters.sortBy === "sizeAsc") {
+            return { sortBy: "backup_size_bytes", sortOrder: "asc" };
+        }
+        return { sortBy: "created_at", sortOrder: "desc" };
+    }, [filters.sortBy]);
 
     const loadMore = async () => {
         if (!cursor || !hasMore) return;
@@ -116,13 +114,13 @@ function BackupsPage() {
                 setHasMore(res.hasMore);
 
                 setError(null);
-            } catch (err) {
+            } catch {
                 setError("Failed to fetch backups");
                 setStatusMessage({ type: "error", message: "Failed to fetch backups" });
             } finally {
                 setLoading(false);
             }
-    }, [ filters.dbType, filters.environment, filters.status, filters.sortBy,, debouncedSearch, sortParams]);
+    }, [filters.dbType, filters.environment, filters.status, debouncedSearch, sortParams]);
 
     useEffect(() => {
         fetchBackups();
