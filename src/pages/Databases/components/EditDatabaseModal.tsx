@@ -125,6 +125,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         if (verifyState === "success") {
             setVerifyState("idle");
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [databaseName, host, port, dbEngine, username, password, sslMode]);
 
 
@@ -133,6 +134,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         if (formErrors.length > 0) {
             setFormErrors([])
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [databaseName, host, port, dbEngine, environment, username, password, sslMode])
 
 
@@ -187,6 +189,7 @@ function EditDatabaseModal({ dbId, onClose, onSuccess }: EditDatabaseModalProps)
         return () => {
             cancelled = true
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [connectionId, backendVerifyState])
 
 

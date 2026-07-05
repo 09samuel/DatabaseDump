@@ -1,3 +1,7 @@
+declare const process: { env: { TZ: string } };
+
+process.env.TZ = 'Asia/Kolkata';
+
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll } from "vitest";
@@ -8,7 +12,7 @@ beforeAll(() => server.listen());
 
 afterEach(() => {
     cleanup();
-    // Reset handlers to initial defaults (clearing any runtime overrides)
+    //Reset handlers to initial defaults (clearing any runtime overrides)
     server.resetHandlers();
 });
 

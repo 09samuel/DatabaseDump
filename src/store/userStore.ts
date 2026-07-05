@@ -25,7 +25,7 @@ export const useUserStore = create<UserState>((set) => ({
         try {
             const userData = await userInfo();
             set({ user: userData.data, loading: false, initialized: true });
-        } catch (err) {
+        } catch {
             set({ user: null, loading: false, initialized: true });
         }
     },

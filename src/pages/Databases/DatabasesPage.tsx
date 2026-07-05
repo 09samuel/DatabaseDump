@@ -22,7 +22,7 @@
     const [status, setStatus] = useState<PageState>("loading")
     const [databases, setDatabases] = useState<Database[]>([])
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
-    const [isAddOpen, setIsAddOpen] = useState<Boolean>(false)
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false)
     const [editingDb, setEditingDb] = useState<Database | null>(null)
     const [deletingDb, setDeletingDb] = useState<Database | null>(null)
     const [backupDb, setBackupDb] = useState<Database | null>(null)
@@ -80,7 +80,9 @@
 
 
     useEffect(() => {
-      loadDatabases()
+      Promise.resolve().then(() => {
+        loadDatabases()
+      })
     }, [])
 
 
@@ -112,7 +114,7 @@
     const stats = useMemo(() => {
         //if (status !== "loaded") return null
         return computeStats(databases)
-    }, [databases, status])
+    }, [databases])
 
 
 

@@ -29,10 +29,10 @@ function VerifyEmail() {
                 setTimeout(() => {
                     navigate("/login", { replace: true });
                 }, 3000);
-            } catch (error: any) {
+            } catch (error) {
                 setStatus("error");
                 setMessage(
-                    error?.response?.data?.message || "Email verification failed. The link may be invalid or expired."
+                    (error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Email verification failed. The link may be invalid or expired."
                 );
             }
         };

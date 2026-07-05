@@ -12,7 +12,7 @@
         });
         const navigate = useNavigate();
         const [loading, setLoading] = useState(false);
-        const [_error, setError] = useState("");
+        const [, setError] = useState("");
         const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error", message: string } | null>(null);
         const [validationErrors, setValidationErrors] = useState<{
             password?: string;
@@ -84,8 +84,8 @@
 
                 setStatusMessage({ type: "success", message: "Password reset successful!" });
                 navigate("/login");
-            } catch (err: any) {
-                const message =  err.response?.data?.message || "Password reset failed. Please try again.";
+            } catch (err) {
+                const message = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Password reset failed. Please try again.";
                 setError(message);
                 setStatusMessage({ type: "error", message });
             } finally {

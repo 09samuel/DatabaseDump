@@ -28,7 +28,7 @@ function DeleteDatabaseModal({ dbId, dbName, onClose, onSuccess }: DeleteDatabas
             onSuccess()
             setLoading(false);
             onClose();
-        } catch (error) {
+        } catch {
             setStatusMessage({
                 type: "error",
                 message: "Database deletion failed",
