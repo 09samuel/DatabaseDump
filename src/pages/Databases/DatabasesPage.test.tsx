@@ -4,15 +4,16 @@ import DatabasesPage from "./DatabasesPage";
 import { delay, http, HttpResponse } from "msw";
 import { server } from "../../test/mocks/server";
 
+vi.mock("react-router-dom", async () => {
+    const actual = await vi.importActual("react-router-dom") as Record<string, unknown>;
+    return {
+        ...actual,
+        useOutletContext: () => ({ dbSearch: "" }), // Mock outlet context
+        useNavigate: () => vi.fn(),
+    };
+});
+
 describe('DatabasesPage', () => {
-    vi.mock("react-router-dom", async () => {
-        const actual = await vi.importActual("react-router-dom") as Record<string, unknown>;
-        return {
-            ...actual,
-            useOutletContext: () => ({ dbSearch: "" }), // Mock outlet context
-            useNavigate: () => vi.fn(),
-        };
-    });
 
 
     it('render list of databases successfully', async () => {
