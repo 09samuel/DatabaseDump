@@ -14,8 +14,6 @@ vi.mock("react-router-dom", async () => {
 });
 
 describe('DatabasesPage', () => {
-
-
     it('render list of databases successfully', async () => {
         render(<DatabasesPage />)
 
