@@ -4,6 +4,8 @@ import DatabasesPage from "./DatabasesPage";
 import { delay, http, HttpResponse } from "msw";
 import { server } from "../../test/mocks/server";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
 vi.mock("react-router-dom", async () => {
     const actual = await vi.importActual("react-router-dom") as Record<string, unknown>;
     return {
@@ -14,8 +16,6 @@ vi.mock("react-router-dom", async () => {
 });
 
 describe('DatabasesPage', () => {
-
-
     it('render list of databases successfully', async () => {
         render(<DatabasesPage />)
 
@@ -25,7 +25,7 @@ describe('DatabasesPage', () => {
 
     it('ensure loaders are shown when in loading state', () => {
         server.use(
-            http.get('http://localhost:3000/connections/summary', async () => {
+            http.get(`${BASE_URL}/connections/summary`, async () => {
                 await delay('infinite');
                 return HttpResponse.json({ data: [] })
             })
@@ -39,7 +39,7 @@ describe('DatabasesPage', () => {
 
     it('renders empty state when no databases are returned', async () => {
         server.use(
-            http.get('http://localhost:3000/connections/summary', async () => {
+            http.get(`${BASE_URL}/connections/summary`, async () => {
 
                 return HttpResponse.json({ data: [] })
             })
@@ -52,7 +52,7 @@ describe('DatabasesPage', () => {
 
     it('renders error state when API fails', async () => {
         server.use(
-            http.get('http://localhost:3000/connections/summary', async () => {
+            http.get(`${BASE_URL}/connections/summary`, async () => {
 
                 return HttpResponse.json({ success: false, error: 'Error msg' }, { status: 500 })
             })
