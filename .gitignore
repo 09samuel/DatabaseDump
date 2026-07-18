@@ -38,3 +38,14 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.local-browsers
+
+# Test coverage
+coverage/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+
